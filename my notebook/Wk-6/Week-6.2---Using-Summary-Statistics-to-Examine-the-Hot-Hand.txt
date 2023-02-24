@@ -1,0 +1,143 @@
+---
+title: "Week 6.2 - Using Summary Statistics to Examine the Hot Hand"
+output: pdf_document
+---
+
+# Using Summary Statistics to Examine the "Hot Hand"
+### Import useful libraries and the updated shot log data
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+Shotlog = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Shotlog1.csv")
+Player_Stats = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Player_Stats1.csv")
+Player_Shots = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Player_Shots1.csv")
+Player_Game = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Player_Game1.csv")
+head(Shotlog)
+```
+
+## Conditional Probability
+We can first calculate the conditional probability of making a shot in the current period conditional on making the previous shot. 
+
+$$Conditional \ Probability=\frac{Probability \ of \ Making \ Consecutive \ Shots}{Probability \ of \ Making \ Previous \ Shot}$$
+
+We will need to create a variable that indicates a player made consecutive shots.
+```{r}
+Shotlog$conse_shot_hit = ifelse(Shotlog$current_shot_hit == 1 & 
+                                  Shotlog$lag_shot_hit == 1, 1, 0)
+head(Shotlog)
+```
+
+We can create a player level dataframe. The average of the variable "conse_shot_hit" would be the joint probability of making current and previous shots. We will also calculate the average of "lag_shot_hit" to indicate the probability of making the previous shot. 
+```{r}
+Player_Prob = Shotlog %>% group_by(shoot_player) %>% 
+  summarise(conse_shot_hit = mean(conse_shot_hit), 
+            average_lag_hit = mean(lag_shot_hit)) %>% 
+  ungroup()
+head(Player_Prob)
+```
+
+### Calculate conditional probability for each player
+We can calculate the conditional probability by dividing the joint probability by the probability of making the previous shot.
+```{r}
+Player_Prob$conditional_prob = Player_Prob$conse_shot_hit/Player_Prob$average_lag_hit
+head(Player_Prob)
+```
+
+We can merge the "Player_Prob" data frame with the "Player_Stats" data frame we created earlier to compare the conditional probability and the unconditional probability. If the two probabilities are the same, or almost the same, then we fail to find evidence that the making the current shot depends on making the previous shot. 
+```{r}
+Player_Stats = left_join(Player_Prob, Player_Stats, by= 'shoot_player')
+head(Player_Stats, 10)
+```
+
+Let's first take a quick look at the missing data "Player_Stats" data frame.
+```{r}
+sapply(Player_Stats, function(x) sum(is.na(x)))
+```
+
+Note that when we created the "conditional_prob" variable, some observations may have missing value since the "average_lag_shot" variable may contain zero value. We will delete these observations with missing values in conditional probability.
+```{r}
+Player_Stats = Player_Stats %>% filter(!is.na(conditional_prob))
+```
+
+We can first check which players have the highest conditional probability, i.e., more likely to have hot hand.
+
+Let's sort the data by conditional probability.
+```{r}
+Player_Stats = Player_Stats %>% arrange(desc(conditional_prob))
+head(Player_Stats, 10)
+```
+
+Comparing the "conditional_prob" variable and the "average_hit" variable, some players have a slightly higher conditional probability but some also have a lower conditional probability.
+
+We can sort the data by the value of difference between conditional and unconditional probabilities. 
+```{r}
+Player_Stats$diff_prob = Player_Stats$conditional_prob - Player_Stats$average_hit
+Player_Stats = left_join(Player_Stats, Player_Shots, by = 'shoot_player')
+Player_Stats = Player_Stats %>% arrange(desc(diff_prob))
+head(Player_Stats)
+```
+
+Comparing the "conditional_prob" variable and the "average_hit" variable, some players have a slightly higher conditional probability but some also have a lower conditional probability. We can sort the data by the value of difference between conditional and unconditional probabilities. We can see that Lamar Patterson has the highest difference between the two probabilities, at 30%. But we could also see that the sample size for Patterson is pretty small. For Damjan Rudez and Miles Plumlee, we have about 90 observations and their differences in the probabilities are about 0.16. 
+
+### T-test for statistical significance on the difference
+
+More rigorously, we can use a t-test to test if the players’ probability of hitting the goal is statistically significantly different than their conditional probability. 
+
+We need to choose a significance level before we perform the test. If the test produces a p-value less than the chosen significance level, then we say that there is a statistically significant difference between the two probabilities; otherwise, we fail to find evidence to support that the two probabilities are statistically significantly different from each other. 
+
+The most commonly used significance level is 0.05.
+
+### To perform a t-test, we will use the "t.test()" function.
+```{r}
+t.test(Player_Stats$conditional_prob,Player_Stats$average_hit)
+```
+The first number is the t-statistics and the second number is the p-value. 
+
+_Note that the p value for the t test is about 0.12, which is higher than the conventional significance level 0.05. Thus the conditional probability is not statistically significantly different than the average success rate. In other words, in the analysis of conditional probability, we fail to find evidence to support the "hot hand"._
+
+## Autocorrelation Coefficient
+We can calculate the autocorrelation coefficient by calculating the correlation coefficient between the “current_shot_hit” variable and the “lag_shot_hit” variable. 
+```{r}
+cor(Shotlog$current_shot_hit, Shotlog$lag_shot_hit)
+```
+
+_As we can see, though the autocorrelation coefficient is positive, the magnitude is very small and close to zero._
+Since some players may have “hot hand”, and hence strong correlation between outcomes of adjacent shots, while some may not.  We can also calculate autocorrelation coefficient for each player.
+
+```{r}
+Autocorr_Hit = Shotlog %>% group_by(shoot_player) %>% 
+  summarise(autocorr = cor(current_shot_hit, lag_shot_hit)) %>% ungroup()
+head(Autocorr_Hit, 10)
+```
+
+### How informative the autocorrelation coefficient also depends on the number of shots per game for each player. Let's add the number of shots and the number of shots per game to the autocorrelation matrix  and sort the data by the size of autocorrelation coefficient.
+```{r}
+Player_Game_Shot = Player_Game %>% group_by(shoot_player) %>% 
+  summarise(avg_shot_game = mean(shot_per_game)) %>% 
+  ungroup()
+head(Player_Game_Shot)
+```
+
+```{r}
+Autocorr_Hit = left_join(Autocorr_Hit, Player_Game_Shot, 
+                         by = 'shoot_player')
+Autocorr_Hit = Autocorr_Hit %>% arrange(desc(autocorr))
+head(Autocorr_Hit)
+```
+
+We will merge the Player_Game_Shot dataframe to the Player_Shots dataframe since both dataframes are measured in player level and both contain information on the number of shots.
+
+```{r}
+Player_Shots = left_join(Player_Shots, Player_Game_Shot,
+                         by = 'shoot_player')
+head(Player_Shots)
+```
+
+### Save updated data
+```{r}
+write.csv(Shotlog, 'Shotlog2.csv', row.names=FALSE)
+write.csv(Player_Stats, 'Player_Stats2.csv', row.names=FALSE)
+write.csv(Player_Shots, 'Player_Shots2.csv', row.names=FALSE)
+```

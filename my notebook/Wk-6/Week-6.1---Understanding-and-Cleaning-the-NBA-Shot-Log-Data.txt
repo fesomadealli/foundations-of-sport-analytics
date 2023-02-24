@@ -1,0 +1,135 @@
+---
+title: "Week 6.1 - Understanding and Cleaning the NBA Shot Log Data"
+output:
+  pdf_document: default
+---
+
+### We will use the 2016-2017 basketball shot log data to demonstrate how to test the hot hand.
+
+### Import useful libraries and the shot log data  
+```{r}
+library(tidyverse)
+library(lubridate)
+
+Shotlog = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Shotlog_16_17.csv")
+head(Shotlog)
+```
+
+```{r}
+dim(Shotlog)
+```
+
+## Data Preparation
+
+### Missing Value
+```{r}
+sapply(Shotlog, function(x) sum(is.na(x)))
+```
+
+### Let’s create some useful variables. 
+- Create dummy variables to indicate hit or miss of current shot and previous shot.
+```{r}
+Shotlog$current_shot_hit = ifelse(Shotlog$current_shot_outcome =="SCORED", 1, 0)
+head(Shotlog)
+```
+- Make sure the variable "date" is stored as a date type variable.
+```{r}
+Shotlog$date = mdy(Shotlog$date)
+```
+
+- Convert the variable "time" to be datetime type variable
+We will use "hm" from the lubridate package to work with variable with only time information.
+```{r}
+Shotlog$time = hm(Shotlog$time)
+```
+
+- Create lagged variable to indicate the result of the previous shot by the same player in the same game.
+ 1. We will first sort the shot outcome by the time in the game;
+ 2. We will group the data by player and game (date) and use the "lag" command to create a lag variable.
+```{r}
+Shotlog = Shotlog %>% group_by(shoot_player, date) %>% 
+  mutate(lag_shot_hit = lag(current_shot_hit, order_by = time)) %>% 
+  ungroup()
+head(Shotlog)
+```
+### We can sort the shot log data by player, game(date), and time of the shot.
+```{r}
+Shotlog = Shotlog %>% arrange(shoot_player, date, time)
+```
+_Notice that for the first shots of the game by the given players, the lagged outcome variable will have missing value._
+
+### Let's create a dataframe for average success rate of players over the season.
+
+Since the "current_shot_hit" variable is a dummy variable (=1 if hit, =0 if miss), the average of this variable would indicate the success rate of the player over the season.
+
+```{r}
+Player_Stats = Shotlog %>% group_by(shoot_player) %>% 
+  summarise(mean(current_shot_hit)) %>% ungroup()
+
+head(Player_Stats)
+```
+
+- Let's rename the "current_shot_hit" variable in the newly created date frame as "average_hit". 
+```{r}
+Player_Stats = rename(Player_Stats, average_hit = 'mean(current_shot_hit)')
+```
+
+### We will use the player statistics to analyze the hot hand. So we will merge average player statistics dataframe back to the shot log dataframe.
+```{r}
+Shotlog = left_join(Shotlog, Player_Stats, by = 'shoot_player')
+head(Shotlog)
+```
+- Create a variable to indicate the total number of shots recorded in the dataset for each player. 
+```{r}
+Player_Shots = Shotlog %>% count(shoot_player) %>% rename(shot_count = n) %>% 
+  arrange(desc(shot_count))
+head(Player_Shots)
+```
+
+We should also note that players have different number of shots in each individual game. We will need to treat the data differently for a player who had only two shots in a game compared to those who had attempted 30 in a game. 
+
+- Create a variable to indicate the number of shots in each game for by each player.
+```{r}
+Player_Game = Shotlog %>% count(shoot_player, date) %>% rename(shot_per_game = n)
+head(Player_Game)
+```
+### We will merge the shot count data frames back to the shot log dataframe.
+```{r}
+Shotlog = left_join(Shotlog, Player_Shots, by = 'shoot_player')
+
+Shotlog = left_join(Shotlog, Player_Game, 
+                    by = c('shoot_player', 'date'))
+head(Shotlog)
+tail(Shotlog)
+```
+
+### We will sort the data again after merging.
+```{r}
+Shotlog = Shotlog %>% arrange(shoot_player, date, time)
+head(Shotlog)
+```
+
+### We will treat the "points" and "quarter" variables as factors.
+```{r}
+Shotlog$points = as.factor(Shotlog$points)
+Shotlog$quarter = as.factor(Shotlog$quarter)
+```
+
+### Missing values
+- Drop observations with missing value in lagged variable.
+```{r}
+Shotlog = Shotlog %>% filter(!is.na(lag_shot_hit))
+```
+
+### Let's take a quick look at the number of variables and the number of observations in our clean dataframe.
+```{r}
+dim(Shotlog)
+```
+
+### Save our updated data
+```{r}
+write.csv(Shotlog, 'Shotlog1.csv', row.names=FALSE)
+write.csv(Player_Stats, 'Player_Stats.csv', row.names=FALSE)
+write.csv(Player_Shots, 'Player_Shots.csv', row.names=FALSE)
+write.csv(Player_Game, 'Player_Game.csv', row.names=FALSE)
+```

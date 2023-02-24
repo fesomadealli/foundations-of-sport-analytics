@@ -1,0 +1,371 @@
+---
+title: "Week 6.3 - Using Regression Analysis to Test the Hot Hand"
+output: pdf_document
+---
+## Using Regression Analysis to Test the "Hot Hand"
+
+In this section, we will use regression analysis to test for the "hot hand." 
+
+### Import useful libraries and the shot log data
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggforce)
+library(broom)
+
+
+Shotlog = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Shotlog2.csv")
+Player_Stats = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Player_Stats2.csv")
+Player_Shots = read.csv("~/Google Drive/Sports Analytics Moocs/MOOC 1 - Foundations of sports analytics/Week 6/Datasets/Player_Shots2.csv")
+head(Shotlog)
+```
+
+### Prediction Error
+Let's create a variable that equals to the difference between the outcome of the shot and the average success rate. Since we typically use the average success rate to predict the outcome of the shot, this difference will capture the prediction error. 
+```{r}
+Shotlog$error = Shotlog$current_shot_hit - Shotlog$average_hit
+Shotlog$lagerror = Shotlog$lag_shot_hit - Shotlog$average_hit
+```
+
+We can graph the outcome of the shots to see if there is any pattern over time in the variable.
+
+We will look at LeBron James' performance during the regular season as an example.
+```{r}
+Shotlog$time = str_replace(Shotlog$time, '0 days ', '')
+
+Shotlog$time = hms(Shotlog$time)
+summary(Shotlog$time)
+```
+
+\pagebreak
+We will first graph the outcome of LeBron James' shots in a single game on April 9th, 2017.
+
+(To make this graph, we use a small trick. We will transform our time variable from a Period object into POSIXct. To convert time to a POSIXct, we will need to set an origin date in the as.POSIXct - the date used does not matter since we are only concerned with graphing the time portion.)
+```{r warning=FALSE}
+Shotlog %>% filter(shoot_player == 'LeBron James' 
+                   & date == '2017-04-09') %>% 
+  mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point()
+```
+
+Let's create a graph of the outcomes of individual shots for Lebron James throughout the regular season. We will create a subgraph for each game he played.
+
+We will first subset a dataset that includes only LeBron James' data.
+```{r}
+LeBron_James = Shotlog %>% filter(shoot_player == 'LeBron James')
+head(LeBron_James)
+```
+
+\pagebreak
+Now we can graph prediction error for LeBron James for all the games separately in the season.
+- We will be using the function "facet_wrap_paginate" from the library "ggforce" in order to print the graphs over multiple pages for viewing. If you were to use the regular "facet_wrap" function from ggplot2, the graph output will appear squished because the large number of graphs produced.  
+```{r warning=FALSE}
+LeBron_James %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 1)
+
+LeBron_James %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 2)
+
+LeBron_James %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 3)
+
+LeBron_James %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 4)
+
+LeBron_James %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 5)
+
+LeBron_James %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 6)
+```
+
+We will do a similar exercise for the statistics of Cheick Diallo.
+```{r warning=FALSE}
+Cheick_Diallo = Shotlog %>% filter(shoot_player == 'Cheick Diallo')
+Cheick_Diallo %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap(~date)
+```
+
+\pagebreak
+## Self Test
+### Graph the prediction error for James Jones
+- Separate the shots by game
+- Interpret your result
+```{r warning=FALSE}
+James_Jones = Shotlog %>% filter(shoot_player == 'James Jones')
+James_Jones %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 1)
+
+James_Jones %>% mutate(time = as.POSIXct(time, '%H:%M:%S', 
+                           origin = '2020-01-20')) %>% 
+  ggplot(aes(x=time, y=current_shot_hit)) + 
+  geom_point() +
+  scale_x_datetime(date_breaks = "2 min", date_labels = "%M") +
+  labs(x = "Time (min)", y = "Shots") +
+  facet_wrap_paginate(~date, ncol = 4, nrow = 3, page = 2)
+```
+### Regression analysis on prediction error
+We will first run a simple regression of the prediction error of current period on the prediction error of previous period.
+```{r}
+reg1 = lm(error ~ lagerror, data = Shotlog)
+summary(reg1)
+```
+
+_The estimated coefficient of the lagged error is statistically significant. However, the R-Squared for this regression is also zero. This means that our specified linear model is not a good fit for our data at all!_
+
+There are a lot of factors that may influence the success of shot, for example, the player’s own skill as a shooter, the type of the shot, the atmosphere of the stadium (whether it is home or away game), and whether it is at the beginning or towards the end of the game. Let’s add these control variables in our regression.
+
+```{r}
+reg2 = lm(error ~ lagerror+player_position+home_game+opponent_previous_shot
+          +factor(points)+time_from_last_shot+factor(quarter), data = Shotlog)
+summary(reg2)
+```
+
+_We can see that the R-squared is now increased to 0.014 which is still very small. The estimate on lagerror becomes statistically significant, but the magnitude of the estimate is 0.0082 which is still very small. And it is negative, meaning that the success of the previous shot would hurt the chance of the subsequent shot. This is contrary to what the hot hand predicts._  
+
+### Weighted least squares regression
+As we have seen, some players had a lot of shot per game while some just had a few. Different players may have different variations in their success rate in the shots. We can run a weighted least squared regression to address this problem. 
+
+Weighted least squares estimation weights the observations proportional to the reciprocal of the error variance of the observation. Thus weighted least squares can overcome the issue of non-constant variance.
+
+### We can use the “weights” paramter in the "lm" function to run the weighted least square regression weighted by the number of shot per game (weight=1/shot_per_game).
+```{r}
+reg3 = lm(error ~ lagerror+player_position+home_game+
+            opponent_previous_shot+points+time_from_last_shot+quarter,  
+          weights=1/Shotlog$shot_per_game, 
+          data = Shotlog)
+summary(reg3)
+```
+From our summary statistics, some players exhibit a stream of the success while some don’t. In our previous regressions, we are grouping all the players together. Let’s see if we can find any effect if we look at individual players.
+
+### Regression analysis on individual players
+
+Run a regression of current error on lagged error for LeBron James.
+```{r}
+reg_LeBron = lm(error ~ lagerror+home_game+opponent_previous_shot+factor(points)+
+                  time_from_last_shot+factor(quarter), 
+          data = LeBron_James)
+summary(reg_LeBron)
+```
+
+Similarly, we can run a weighted least squares estimation on LeBron James’ prediction error, weighted by the number of shot he made in each game.
+```{r}
+reg_LeBron_wls = lm(error ~ lagerror+home_game+opponent_previous_shot+
+                      points+time_from_last_shot+quarter, 
+                    weights = 1/LeBron_James$shot_per_game,
+                    data = LeBron_James)
+summary(reg_LeBron_wls)
+```
+
+We can also take a look back at LeBron James’ autocorrelation coefficient. 
+```{r}
+Shotlog %>% filter(shoot_player == 'LeBron James') %>% 
+  summarise(auto_corr = cor(current_shot_hit, lag_shot_hit))
+```
+
+_The autocorrelation coefficient between the outcomes of the current shot and the previous shot for LeBron James is very small. And the autocorrelation coefficient is indeed very close to our estimates on the lagged error in the weighted least squares estimation._
+
+We can do a similar exercise for James Jones. We will start with an ordinary least square regression. 
+```{r}
+reg_Jones = lm(error ~ lagerror+home_game+opponent_previous_shot+factor(points)+
+                      time_from_last_shot+factor(quarter), 
+                    data = James_Jones)
+summary(reg_Jones)
+```
+
+We will also run a weighted least squares estimation on Jones' statistics. Weight=1/shot_per_game.
+```{r}
+reg_Jones_wls = lm(error ~ lagerror+home_game+opponent_previous_shot+points+
+                     time_from_last_shot+quarter, 
+               weights=1/James_Jones$shot_per_game,
+               data = James_Jones)
+summary(reg_Jones_wls)
+```
+
+
+## Self Test
+
+Use regression analysis to test "hot hand" for Cheick Diallo
+1. Run an ordinary least square regression of current error on lagged error for Cheick Diallo.
+2. Run a weighted least sqaure regression of current error on lagged error for Cheick Diallo, weight=1/shot_per_game.
+3. Interpret your regression results.
+```{r}
+reg_Diallo = lm(error ~ lagerror+home_game+opponent_previous_shot+
+                  points+time_from_last_shot+quarter,  
+          data = Cheick_Diallo)
+summary(reg_Diallo)
+```
+
+```{r}
+reg_Diallo_wls = lm(error ~ lagerror+home_game+opponent_previous_shot+
+                      points+time_from_last_shot+quarter,  
+          weights=1/Cheick_Diallo$shot_per_game, 
+          data = Cheick_Diallo)
+summary(reg_Diallo_wls)
+```
+
+### More generally, we can define functions to run regressions for each individual player. 
+
+- Define a function to run ordinary least square regression by player.
+```{r}
+reg_player = function(player) {
+  Shotlog_player = Shotlog %>% filter(shoot_player==player)
+  reg_player = lm(error ~ lagerror+home_game+opponent_previous_shot+
+                    points+time_from_last_shot+quarter, 
+                  data = Shotlog_player)
+    return(summary(reg_player))
+}
+```
+
+```{r}
+reg_player('Russell Westbrook')
+```
+
+- Define a function to run weighted least square regression by player.
+```{r}
+reg_wls_player = function(player) {
+  Shotlog_player = Shotlog %>% filter(shoot_player==player)
+  reg_wls_player = lm(error ~ lagerror+home_game+opponent_previous_shot+
+                    points+time_from_last_shot+quarter, 
+                  weights=1/Shotlog_player$shot_per_game,
+                  data = Shotlog_player)
+    return(summary(reg_wls_player))
+}
+```
+
+```{r}
+reg_wls_player('Russell Westbrook')
+```
+
+### We can extract estimated coefficient on the lagged error for each player. 
+- Create a list of unique player names
+```{r}
+player_list = unique(Shotlog$shoot_player)
+```
+
+```{r}
+player_list[1]
+```
+
+- Run weighted least squares regression for each player by specifying "shoot_play==player_list[index]"
+```{r}
+Shotlog_player=Shotlog %>% filter(shoot_player==player_list[1])
+
+reg_player=lm(error ~ lagerror+home_game+opponent_previous_shot+points+
+                time_from_last_shot+quarter,
+              weights=1/Shotlog_player$shot_per_game, 
+              data= Shotlog_player)
+summary(reg_player)
+```
+
+- Extract the estimated coefficients, along with the p-value and t-statistics of the estimates and store them in a dataframe
+- We can do this using the "tidy" function from the "broom" package to get a tabular data representation
+```{r}
+tidy(reg_player)
+```
+
+- Write a loop to extract regression outputs for each player and store them in a dataframe. We need to exclude several players who we are unable to run the regression for. 
+```{r}
+i = 1
+Player_Results = data.frame(shoot_player = character(),
+                               Coef = double(),
+                               T_Statistics = double(),
+                               P_Value = double())
+
+players_exc = c('Demetrius Jackson', 'Walter Tavares', 'Mike Tobey', 
+                'Larry Sanders', 'Ben Bentil', 'Alonzo Gee', 
+                'Michael Gbinije', 'Chinanu Onuaku', 
+                'Isaiah Taylor', 'Brice Johnson', 'Axel Toupane', 
+                'John Lucas III', 'Jarrett Jack', 'Josh Huestis', 
+                'Josh Huestis', 'Arinze Onuaku', 'Patricio Garino',
+                'Jerryd Bayless', 'Justin Harper', 'John Jenkins', 
+                'Jarell Eddie','Jordan Farmar')
+player_list = player_list[!(player_list %in% players_exc)]
+
+while(i <= length(player_list)){
+  skip_to_next <- FALSE
+  Shotlog_player = Shotlog %>% filter(shoot_player==player_list[i])
+  
+  reg_player = lm(error ~ lagerror+home_game+opponent_previous_shot+
+    points+time_from_last_shot+quarter, 
+    weights = 1/Shotlog_player$shot_per_game, 
+    data = Shotlog_player)
+  RegOutput = tidy(reg_player)
+  
+  LagErr = RegOutput %>% filter(term == 'lagerror') %>% 
+    mutate(shoot_player = player_list[i]) %>% 
+    rename(Coef = estimate, T_Statistics = statistic, P_Value = p.value) %>% 
+    select(shoot_player, Coef, T_Statistics, P_Value)
+  Player_Results = rbind(Player_Results, LagErr)
+  i = i + 1
+}
+```
+```{r}
+RegPlayer = Player_Results %>% arrange(shoot_player)
+head(Player_Results)
+tail(Player_Results)
+```
+
+- Merge the total number of shots captured in "Player_Shots" to the regression result dataframe. This total number of shots represents the sample size of each regression
+```{r}
+RegPlayer = left_join(RegPlayer, Player_Shots, by = 'shoot_player')
+head(RegPlayer)
+```
+
+- Display players with statistically significant estimates on the lagged error variable
+```{r}
+RegPlayer %>% filter(P_Value <= 0.05)
+```
+
+_There are a total of 38 players with statistically significant estimates on the lagged error variable, that is, the success of their previous shots impact the success rate of their current shot. Interestingly, more than half of these estimates are negative, which means that a success in the previous shot actually hurts the chance of scoring in the current shot. This is the opposite of a "hot hand."_
+
+_Overall from our regression analyses, 13 players, Boris Diaw, Darren Collison, James Michael McAdoo, Joe Young, Kentavious Caldwell-Pope, Kyle Wiltjer, Malcolm Brogdon, Miles Plumlee, Robert Covington, Skal Labissiere, TJ Warren, Timofey Mozgov, and Tony Parker have positive and statistically significant estimate on the lagged error variable. Thus, these players may have "hot hand." Note that the estimate for Kyle Wiltjer is 1 and there are only a total of 14 observations for him. We need to interpret his result with caution._
+
+```{r}
+#Save updated data to csv file
+write.csv(Shotlog, 'Shotlog3.csv', row.names=FALSE)
+write.csv(Player_Stats, 'Player_Stats3.csv', row.names=FALSE)
+write.csv(Player_Shots, 'Player_Shots3.csv', row.names=FALSE)
+```
