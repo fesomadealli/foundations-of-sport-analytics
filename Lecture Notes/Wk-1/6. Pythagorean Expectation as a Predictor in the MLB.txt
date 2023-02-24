@@ -1,0 +1,150 @@
+So far this week, we've looked at the way in which you
+can explain one variable using another. We've seen that we can relate,
+win percentage to Pythagorean expectation, and show that there is a close
+fit between these two variables. But so
+now we're going to go one step further and ask whether we could actually
+forecast win percentage in the future using historical
+Pythagorean expectation. And of course, that's one thing we're
+interested in with Data Analytics. You can think of there being
+two aspects to this one is, can we explain what's
+happened in the past? And the second is, can we forecast
+what's going to happen in the future? So let's see how we might
+do this with baseball data. And what we're going to do is we're
+going to divide a particular season into two hogs, and then we're going to
+take the Pythagorean expectation from one half the first half of the
+season, and then we're going to see how well that fits with the win percentage
+in the second half of the season. And as a control for that, we can look at how well the win percentage
+from the first half of the season fits with the win percentage of
+the second half of the season. And if our Pythagorean expectation did
+better than win percentage, then we might think that that's not a bad forecasting
+tool that we might have at our disposal. So let's go about it and see what we find. So we're going to start off
+in the same way before we're going to import our packages. Import our data. Take a quick look at the data and
+see what we got. Again we're familiar with this, so
+we've actually seen this before, and then we're going to go through
+the same process we've done. We did this right at the beginning
+of the week, but we've done this for all the other sports as well. We're going to create the summary data for
+Win Percentage and Pythagorean expectation for each team
+as home team and as visiting team. And then we're going to combine
+those two data frames together. Now we're going to do something different
+now from what we did in the previous notebooks. We're going to use the command concat,
+pd.concat, which is instead going to stack
+the two performances the teams on top of each other so rather than merging them,
+so you've got the home performance data on the left and
+the away performance on the right. We're going to put one
+on top of the other. So you've got home on the top and
+away team performance on the bottom so that we've got a list essentially of
+all games played across the season. So when we do that,
+you can see that we have a list that is now 4862 rows long. So effectively,
+we could then now list this in date order. So because we've got the date of this in
+the data frame, and then we could create a subset which was going to be performance
+up to a certain point in the season. And that's where we're going to
+create the two halves of our data. We're going to look at performance
+in the first half, which I'm going to choose an arbitrary date for,
+and then look at the second half. So we still need to define
+what is a win in this data. So again, a win is obviously where you
+scored more runs than the opposing team. So we run that first. So we've got now wins in our data. So I'm going to divide the data
+according to the All Star Game. So that's usually taken us the mid
+point of the season in baseball. And in 2018,
+the All Star Game was on July 17th. So the code for that in the data and
+using our date is 20180717. And then I'm going to use
+a command we haven't seen yet .described to show you
+what that data looks like. So .described if you look across the top,
+it gives you the count. So how many observations we have? So there were 2886 games up to
+the All Star Game in the season, and it gives you some other descriptive
+statistics there that you might want. And then we can do the same thing for
+the second half. So I'm going to create a subset
+out of the data called half, too, and describe that So
+we've now two halves of the data half one. The results for the teams in
+the first half of the season and half two the results for the teams
+in the second half of the season. So now I need to create
+the performance variables for each team in each half of the season. So I'm going to do a group by again. And so the group by looks very
+similar to the sort of group by we've been running before. But because the data is stacked,
+we've already taken account of when the teams are home team and
+when the teams are away team. And you can see here,
+we've got the performance for the number of games played in the first
+half of the season for each team. Again, we've got 30 rows of data,
+number of games played, number of wins, runs for and runs against. And so we can now create our performance
+statistics for the win percentage and the Pythagorean expectation for
+the first half of the season again. So we've just created those numbers here
+in the way that we've done it at every stage before and likewise we're going
+to create the performance variables for the second half of the season. So we're going to call this half two, and that's going to be again .group by
+where we some against these variables. The same variables. Games played, the count, wins,
+runs scored and runs against for the second half of the season. And we can create from that for the second
+half of the season the win percentage and Pythagorean expectation for each team. And since we've now got for all 30 teams
+their first half of the season and the second half of the season performance, let's merge these two
+data frames together. Which we're going to start
+calling this half to predictor, because I'm going to use the data from
+the first half to see how well it predicts performance in the second half. So here we have the 30 roads of data,
+one for each team and their performance statistics for
+the first half and for this second half of the season. So let's just run a rail plot then. So let's run a rail plot. Where we have our X is the Pythagorean
+expectation from the first half of the season and are Y is the win percentage
+in the second half of the season? So let's see how closely these two
+things look together on the same shot? Well, there you've gotta scatter, right? So it's not quite as perfect
+as we saw when we looked at the simultaneous Pythagorean
+expectation of win percentages. But it's not like the cricket where
+there is no relationship at all. There's clearly some kind of relationship
+there in the data that we can see. And just to see whether how
+reliable that might be, let's compare it with the win
+percentage from the first half of the season using the win percentage
+of the second of the season. So what does that look like when we do? And you can see here,
+it's actually rather similar. So perhaps that's not surprising,
+because win Percentage and Pythagorean expectation go closely
+together is perhaps not surprising that we see predictor of win percentage
+in the second half of the season as roughly similar to
+the Pythagorean expectation. So now what we're going to do is
+look at correlations to see which is more correlated with performance in
+the second half of the season win percentage in the second
+half of the season. Is it the win percentage from
+the first half of the season, or the win percentage from
+the second half of the season? I'm going to create these variables
+here and create the correlation. So what I've done here is I've defined
+a set of variables called Kiev abs, my key variables. And then I'm asking for
+a correlation matrix for kiev abss. So that's what this looks like. So let's read this across the top. So here is the variable. We're particularly interested in win
+percentage in the second half of the season. And here is the level of
+correlation between win percentage in the second of the season and
+our other variables. Well, what are other variables? So the first is win percentage
+of the second half season? Well, of course,
+it's perfectly correlated with itself, So that's just has a value of one. That's going to be true across
+the diagonals in this Matrix, so you can just ignore those. But here's the thing we're interested in. The correlation between win percentage
+in the second half of the season and win percentage in the first
+half of the season. And the correlation between win
+percentage in the second half season and the Pythagorean expectation in
+the first half of the season. So the first value here is 0.652 and the second value here is 0.691. What that means is there's a closer
+correlation between the Pythagorean expectation in the first half of the
+season and win percentage in the second half of the season than there is between
+win percentage in the first half of the season and win percentage in
+the second half of the season. So that in telling us that the Pythagorean
+expectation is actually working better than win percentage and this correlation
+coefficient is relatively high. So that means that in some sense,
+we would do well to use Pythagorean expectation as
+our forecasting value for win percentage rather than
+win percentage itself. And that Pythagorean expectation is
+going to be a fairly good forecaster of win percentage. And in fact, it's worth pointing out. This is precisely why Bill James
+originally advanced Pythagorean expectation as a useful measure in
+baseball precisely because he thought it would be more reliable than
+looking at win percentage. So what we've shown with our
+analysis of the data is that Bill James is exactly right,
+which is perhaps not a surprise. It is a very nice illustration of
+his insight about the value of Pythagorean expectation. And one thing we can see
+here is if we just do a sort to see how close the relationship is for
+each team. So we've sorted here the values by
+win percentage in the second half of the season, and you can see
+here what that relationship is. And indeed, as you go down, you can see,
+which ones are highly correlated and which ones are less well correlated. And so that's something if you're
+interested in looking at individual teams that you might want to study. So to conclude what we've
+gone through this week, we've looked at a relationship
+between variables in sports. We've looked at the relationship
+between win percentage and Pythagorean expectation and explored how
+closely these two things go together. What we found is that generally, in most
+sports, they do fit very closely together, so they are highly
+correlated with each other. Although we found that
+cricket was an exception, we've also found that not only can
+you use a value like Pythagorean expectation to understand or explain
+the relationship of data in the past, but you can actually use it
+as a forecasting variable. And that's something that we're going
+to be interested in as we progress through these books. So that gives you the idea and
+a sense of the power that there is in using a framework like
+python to analyze sports data. We're going to obviously go through
+these techniques in much more detail and make you much more familiar with
+how to use these things yourselves. And hopefully that's going to become
+clearer as you progress through these books.

@@ -1,0 +1,135 @@
+Hello everyone, welcome to Week 2 of Foundations of
+Sports Analytics course. In this week, we will
+start from introducing some data cleaning and
+processing tools using Python. We'll then go on to conduct some descriptive and
+summary analyses on some NBA datasets. At the end of the week, we'll also go over
+correlation analysis. As a first step, it is
+important to understand why we would use Python to
+do sports analytics. Python is a powerful
+programming language with various features. Python is developed under
+an open-source license, and therefore, it
+is free for anyone to use, even commercially. Python is particularly
+useful in web data scraping. There are a lot of sports data that are publicly available on the Internet and we
+can use Python to download this data in a
+very efficient manner. Python can also
+perform data analysis. To analyze data in Python, we use some Python libraries, which are collections of
+functions and methods for you to perform different tasks without having to write your
+own Python codes. In this week, we'll introduce
+three useful libraries, Pandas and NumPy, which both specialize in data manipulation
+and basic analysis. We will also use Matplotlib, which allows us to make some more advanced
+statistical graphs and help us visualize our data. Let's get started with assessing
+some NBA data in Python. We will start with
+some small datasets and eventually move on to working with larger
+and more complex datasets. Please open your
+Jupyter Notebook, Assessing Data Using Python. I will go through this
+notebook to show you some basic and important tools in assessing and processing
+data in Python. In Jupyter Notebook, we
+can write the code in a cell and then click
+"Run" to execute the code. I'll recommend you to limit
+lines of code in each cell. This will allow us to see the outputs from each
+line of the code and it will be easier to
+detect any error in our code if there's any error. I mentioned about
+Python libraries. Every time we want to use written functions
+from the libraries, we will have to first
+import the libraries. Let's import it to
+libraries, Pandas, abbreviated as PD, and then NumPy abbreviated as NP
+to the Jupyter Notebook. We'll import the first datasets, NBA Teams, into our
+Jupyter Notebook. This dataset is
+stored as a CSV file. To import a CSV file into Python, we'll use the read underscore CSV function under
+Pandas library. Inside parentheses, we will
+use a quotation mark and then write the address or the
+file path of our dataset. This would depend
+on where you save your dataset in your computer. Notice that in the file path, we will need to use forward slash instead of backslash
+between folders. Let's import the
+NBA Teams CSV file into Jupyter Notebook and we'll call it NBA underscore Teams. We can use the display
+function to view the data frame imported
+into Jupyter Notebook. This dataset, NBA Teams, provides some basic information of the teams in the NBA league. In a dataset, each row
+represents an observation, and in this dataset,
+it is a team. Each column represents a
+variable which contains the information of the characteristics
+of the observation. A variable can take
+different values in different situations. For example, the
+variable Full Name carries information of the full name of the team and the variable Nickname carries information of the
+nickname of the team. The number of
+observations in a dataset represent the size of our sample and the number of
+variables represent the richness of the
+information in our dataset. We can use the shape
+function in Python to see how many variables and how many observations
+are in our datasets. The output is 30 and eight. The first number indicates
+the number of rows, which is the number
+of observations and the second number indicates
+the number of columns, which means the
+number of variables. You may notice that when we
+import data into Python, there's an index
+number assigned to it. In NBA teams DataFrame, we have a column called
+unnamed column zero. Let's first rename this unnamed
+variable to team number. We could use the rename
+function in Python to do so. It will be useful to
+specify an argument inplace equals to true in
+this rename function. This argument ask
+Python to replace the old name of the
+variable with a new one. If we do not specify
+this argument, the default setting
+in Python is to create a new variable
+with a new name. Let's also rename ID to team ID. We'll be working with a
+game-level dataset soon, so it would be helpful to specify what kind of ID this is. You may do an exercise by renaming full name to team name. Since the newly renamed
+verbal team number carries little meaning, we can just delete this variable. To Java variable, we need to provide the
+name of the variable, as well as the argument
+x is equals to one. This argument tells
+Python that we are jumping a column
+rather than a row. The jump function
+also allow you to jump a list of variables. Now we have done some
+basic data cleaning of our NBA team DataFrame. Let's move on to work with
+a game-level datasets. We have a basketball_game
+CSV file in the course file. Let's import the CSV file into Jupyter Notebook
+and name it games. Earlier we used the
+display function to display the whole DataFrame. We could also use
+the head function to just show the first few
+observations of the DataFrame. The default of the head
+function is to show the first five observations or the first five rows
+of the DataFrame. As you can see, the first
+five games are not NBA games, instead they are WNBA games. Indeed, this DataFrame contains
+NBA games, WNBA games, and NBA 2K games, which is a simulation video game. We can jump in observation, which is row using the
+jump function as well. Where we are jumping a
+row rather than a column, we'll use the argument
+x is equal to zero rather than x
+is equals to one. For example, when we jump the first row of the Data-frame, we can first use the
+brackets to specify the row number and then specify axis equal to 0 to
+jump the first row. In Python, the first
+row is row number 0, so the index number starts from zero rather than from one. More often, we will drop observations based on
+certain conditions. For example, Las Vegas Aces
+is a women's basketball team. If we are only going to focus
+on men's basketball team, we will drop all the games
+played by Las Vegas Aces. In this case, instead of
+using the drop function, we can specify TEAM_NAME to be not equal to
+Las Vegas Aces. In this line of code, essentially, we are
+creating a new DataFrame, excluding all the games
+played by Las Vegas Aces, and we will place the old
+DataFrame with the new one. We're going to focus
+on the NBA games. Let's figure out the NBA
+games by merging the NBA team DataFrame and the game DataFrame and only keep the
+ones that match each other. NBA teams are identified
+by the team ID. We have renamed the ID
+verbal into team ID in the NBA team DataFrame so it should match with the variable
+in the games DataFrame. Since the variable team name is also persons
+involved DataFrames, we will also include
+this variable as a criterion to merge the two DataFrames,so that
+in our merge DataFrame, there will be no
+duplicate variables. As you can see, the
+merge DataFrame has a lot more variables
+and we cannot fit all of them in the screen. We can obtain a lease of variables using the
+columns command. This provides us a full list of all the variables
+in the DataFrame. Let us start, there are
+some duplicate information in this DataFrame. The variable abbreviation and variable team abbreviation carry the same information and it is not necessary
+to keep both of them so let's delete the
+variable abbreviation. Currently, the merged
+DataFrame is sorted by the criteria we use
+to merge Dataframes. Therefore, the NBA
+games DataFrame is currently sorted by
+teamID and team_name. We may be interested in sorting the data
+by other criteria. For example, the
+date of the game. We can do so by using the
+underscore values function. In our DataFrame, the variable gameID is created based on the
+date of the game. We can sort a games by gameID. The larger the ID number, the more recent the game is. We want to use descending
+rather than ascending order. We will specify ascending
+equals to force.

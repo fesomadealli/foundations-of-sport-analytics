@@ -1,0 +1,143 @@
+One of the primary
+goals of analyzing sports data is to understand the relationship
+between two factors. For example, we may
+be interested in individual play performance
+and team performance. When individual players'
+performance improve, would a team overall
+performance improve as well? We may also be interested in the viewership in
+a team performance. When the team performs better, would viewership go up as well? Similarly, we may be interested in the ticket price
+and attendance. When ticket price increases, would attendance
+increase or decrease? To view the relationship
+between two variables, we can graph a scatter plot of the two variables in Python. For example, it may
+be reasonable to suspect that there may
+be some relationship between a number of assists and a number of field goals
+made in basketball. We can create a
+scatter plot using the plot dot scatter
+function in Python. I specify the number of assists
+and the variable AST in the x-axis and the number of field goals made the
+variable FGM in the y-axis. From this scatter plot, we can see that as the
+number of assists increase, it appears that the number of field goals may also
+increase as well. To better visualize
+this relationship, we can also add a regression
+line to the graph. A regression line will fit the data point into
+a linear line. In this case, the number of
+field goals made will be a linear function of
+the number of assist. We'll go full
+regression analysis in more detail in the
+upcoming weeks. To add a regression line, we need to first introduce a
+new library, called Seaborn. Seaborn is a data visualization
+library in Python that provides a high
+level interface for drawing informative
+statistical graphs. We import Seaborn as sns. We can use the regplot function, R-E-G-P-L-O-T function
+in Seaborn Library to graph a regression line
+as well as the scatter plot. In this line of code, we tell Python to put the
+number of assist, AST, in the x-axis and the
+number of field goals made, FGM, on the y-axis. We also specify the data, which is the NBA games. We also need to
+specify the marker. Similarly, we can use the
+PY plot function from the map-plot library to add labels and titles into our graph. Now this graph with the
+regression line gives us a more clear picture that as the number
+of assist increase, the number of field goals
+made also increase. In this case, we can
+say that there is some positive relationship
+between the two variables. We can quantify the
+linear relationship using correlation analysis. In particular, we can use
+a correlation coefficient, which is a single number, to summarize this
+linear relationship. To introduce correlation
+coefficient, we need to first
+introduce covariance, which measures the joint
+variability of two variables. Covariance is defined
+as the average of the product of the deviation
+form the individual means. The sign of the covariance shows a tendency in the linear
+relationship between the two variables whether the two variables are moving the same or opposite direction. When the covariance
+equals to zero, we say that the two variables
+are not linearly related. This could mean that
+when x changes, there is no change in y. This could also means
+that when x changes, y is changing but in
+a non-linear fashion. When the covariance is positive, we say that the two variables
+are positively related. This means that when x increases, y increases as well. Similarly, when the
+covariance is negative, it means that the two variables
+are negatively related. When x increases,
+y would decrease. It is sometimes hard to
+interpret covariance, in particular, the size
+of the covariance. For example, if we have a covariance equals
+to 100, equals to 10, or equals to 0.5, can we say that the correlation between
+the two variables is strong or weak? One problem with
+covariance is that the covariance depends on
+the unit of measurement. Therefore, it is
+hard to interpret the size of the covariance. Instead, we typically only interpret the sign
+of the covariance, whether it's positive
+or negative. Correlation coefficient,
+on the other hand, is a standardized measure. Correlation
+coefficient is defined as the covariance divided by the product of the
+standard deviations of the two variables. Correlation
+coefficient, similar to covariance measures the
+linear relationship. Correlation coefficient does not depend on the units
+of measurement, and it's always between
+negative one and one. If the correlation coefficient
+is greater than zero, we say that the two variables
+are positively related. That means that as the value
+of one variable increases, the value of the other
+variable increase as well. When the correlation
+coefficient is negative, that means that the two
+variables are inversely related. When the value of one
+variable increases, the value of the outer
+variable would decrease. When the correlation
+coefficient equal to zero, we say that there is
+no linear relationship between the two variables. In some rare cases, when the correlation
+coefficient equals to one or when the correlation
+coefficient equals to negative one, then there would be perfect
+linear relationship between the two variables. Again, it's important
+to emphasize that correlation
+coefficient only measures linear relationship
+when the absolute value of the correlation
+coefficient goes to zero, it does not necessarily
+mean that there's no relationship between
+the two variables. It just means that these two variables are
+not linearly related. In correlation coefficient
+only measures whether the two variables are moving in the same or opposite direction. It does not say anything about causal relationship
+between the two variables. In Python, we can use
+the corr function, corr to calculate
+correlation coefficient. We specify the first variable, NBA games, number
+of assists, ast, and use the corr
+function and inside a corr function we specify
+the other variable, NBA games are fgm. The correlation
+coefficient between the number of assists and the number of field
+goal made is about 0.7. We can say that there is
+a positive correlation between the two variables. Let's also investigate
+the relationship between the number of assists and the number of
+field goals attempted. We first graph a scatter plot
+with a regression line as well to visualize
+the relationship between the two variables, ast and in this time, fga, field goal attempted. As we can see from this graph, as the number of
+assists increase, there is some slight increase in the field goal attempted. Especially when we compare
+this graph between the number of assists and
+field goal attempted, to the graph between
+the number of assists and field goals made. We can see that the slope
+in the second graph, it's much smaller than
+the previous graph. Now let's also calculate
+the correlation coefficient between the number of assists
+and field goals attempted. This correlation coefficient,
+it's about 0.36, which is much smaller than the correlation
+coefficient between the number of assists and field
+goals made, which is 0.7. Based on the graph and the
+correlation coefficient, we can see that there's only a very small positive relationship between the number of assists
+and field goals attempted. We can also grab the
+scatter plot by group using the hue option, hue option. Let's say we want to separate
+by the result of the game, whether the team won the
+game or lost the game. We'll continue to produce a scatter plot with
+regression line between the number of assists and number of goals attempted. In this case, we'll use lm
+plot function instead of red plot function in
+the seaborn library. The lm plot function combines red plot function and Facet Grid. Facet Grid produces
+multi-plot grid for plotting conditional
+relationships. Therefore Facet Grid allows us to separate the dataset into multiple panels based on specified conditions
+to regionalize the relationship between
+multiple variables. Inside this lm plot function, we will add an option. Ek hue equals to wl. As we can see from this graph, there's no significant
+difference in the relationship between
+the number of assists and field goals attempted when the team won the game and
+when a team lost the game. Lastly, we can also construct a correlation coefficient table for all the numerical variables. We can simply specify
+the data frame name, NBA games and use the
+corr function and the correlation
+coefficient we introduce is a Pearson correlation
+coefficient. We need to specify method
+equals to Pearson. This table shows the
+correlation coefficient between any two numerical
+variables in our dataset.

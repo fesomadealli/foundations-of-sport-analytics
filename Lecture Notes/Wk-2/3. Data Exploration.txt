@@ -1,0 +1,105 @@
+In the previous lecture, we have introduced
+some important tools to clean and process
+data in Python. We have also prepare an NBA game dataset that
+is ready to be analyzed. In this lecture, let's go ahead
+and explore this dataset. Please first open out
+the Jupyter notebook, Data Exploration and
+Summary Statistics. We will first import pandas library into
+Jupyter notebook. Again, we will import it as pd. That's also important to NBA game dataset
+that we prepare in the last lecture and
+name it NBA_Games. Again, we can use the read_CSV function in
+Pandas to import the dataset. We can also use the
+head function to view the first five
+rows of the dataset. As you can see in this
+NBA games dataset, there were some variables
+that contain numbers, such as the TEAM_ID,
+YEAR_FOUNDED, SEASON_ID. There were some variables
+that contain tags. For example, CITY,
+TEAM_NAME, NICKNAME, etc. In general, there are
+two types of variables, qualitative and
+quantitative variables. Qualitative variables
+store information in the form of text while quantitative
+variables store information in the
+form of numbers. In sports, the different
+types of sports, such as football, basketball, soccer, hockey are
+qualitative informations. Sports type, therefore, it's
+a quantitative variable. Similarly, different
+leagues, NFL, NBA, and different teams are also
+qualitative informations. We also need to distinguish
+women's sports, men sports. Therefore, gender is another
+qualitative information. Therefore, gender is also
+another qualitative wearable. When we are talking about
+international sports, different countries, it's also
+quantitative information. When it comes to
+quantitative variables. In sports, we often work with
+different numbers of goals, number of points that a team
+will earn over the season. When we come to individual level, player's age, player's salary are so quantitative variables. Quantitative variables can
+further be divided into discrete variables where the
+numbers are in integer form, and continuous variables where the variables can take
+on any numerical value. It is important to understand the different types of variables because we will analyze the variables in
+slightly different ways. Let's take a look at the types of variables in our
+NBA games dataset. We can first type the
+DataFrames name NBA_Games, and then put a dot here and
+put our function, dtype. Since we're accessing
+the web or type for all the variables in
+the NBA_Games dataset. We need to add an s, make it pro in the
+end of the function. As you can see, there were three different types of variable in our NBA games dataset. There is object, int64, float64. Object represents categorical variable or qualitative variable, which means that the verbal
+is not in numerical form. Int64 indicates that the
+wearable is in integer form, and therefore the values of the variables are whole numbers. Float64 represent real numbers that may contain decimal point. When we analyze data, we often analyze data
+in numerical forms. Therefore, we may have to convert our qualitative variable
+into quantitative variable. One way to convert qualitative variable or categorical variable into quantitative variable is to create dummy variables that can carry two
+values, one or zero. If the observation belongs to the specify category based
+on a qualitative variable, then a dummy variable indicating the category will equals to one. Otherwise, it will equal to zero. In our MBA games dataset, the WL variable that
+indicates the result of the game it's a
+quantitative variable that has true value, W and L. We can create
+a dummy variable, that can word this
+quantitative variable into numerical form. In Python, we can use
+to get dummies function under the panda's library
+to create dummy variables. We will create a new
+DataFrame called dummy, that include all the
+variables in MBA games. Also create dummy
+variables that can word the original qualitative
+variable WL, into numerical forms. After recreate this
+dummy DataFrame, we can also use the columns
+function that we learned in the previous lecture to see a full list of variables
+in this new DataFrame. Notice that there are two
+new variables created in this new Dataframe,
+WL_L and WL_W. The original variable WL, is no longer in
+this new DataFrame. In basketball, if the score is tied at the end of
+the regular period, the teams replay
+multiple five-minute over time periods until
+a winner is decided. Therefore, there will only
+be two outcomes in a game. Either a team win the
+game or lose the game. Therefore, we only need one
+of these two variables, WL_L and WL_W to capture
+the result of the game. Let's keep the WL_W variable. Let's attach this
+variable back to our original MBA games DataFrame. We can attach a variable to another DataFrame by using the
+Concat function in pandas. In this line of code inside
+the Concat function, we specify the dataset MBA_games, and a variable WL_W from the dummy dataset to
+the MBA games dataset. We also want to specify
+X is equals to one, because we are attaching
+a column, not a row. After we reattach this
+new dummy variable, back to our MBA games dataset, let's rename this new
+variable WL_W to simply WIN. We can again use the rename function
+to rename a variable, and we want to use
+implies equals to two to make sure that we do not create additional
+duplicate variable. In sport, we often have to
+work with date and time data. It is always important, but also very tricky to
+work with date variables. In our MBA games dataset, there's a variable game date that includes information of
+the date of the game. Let's first take a look at
+the column variable type of this game date variable
+using the D type function. We can simply classify
+the DataFrame, and then the variable, and use D type, in this case, singular without the S to find
+the type of the variable. Right now the game date
+variable is store as an object, which means that each date is pretty equally
+without any ordering. We can use the two date-time
+function in Pandas to convert an object to
+a date type variable. But to do so, we
+will also need to import DateTime library
+to Jupyter notebook. We can also use the head
+function to view the value of the first five observations
+for the date variable. Now we can see that
+on the game date is store as DateTime object. After some basic exploration of our dataset and
+some understanding of the different
+types of variables, let's do some descriptive
+and summary statistics of our MBA games DataFrame.

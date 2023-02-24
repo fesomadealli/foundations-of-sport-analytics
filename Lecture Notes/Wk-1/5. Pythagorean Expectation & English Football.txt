@@ -1,0 +1,113 @@
+Now we're going to look
+at the relationship in English football or soccer as it's called in North America. Here we've got a slightly
+different problem with the data we're
+going to look at. In order to have more data, we can look at teams playing across different competitions
+at the same time. Now that's not something
+we could do with baseball. For example, if we wouldn't be unlikely to look at
+the same relationship between major league baseball and minor league baseball
+at the same time. Minor league baseball
+is a lower level of baseball competition
+and we wouldn't tend to mix up the data
+from two competitions. But in soccer, we might be
+actually tempted to do that. One reason is the phenomenon
+of promotion and relegation. Teams move between levels from season to season
+based on performance, the best teams in a
+lower-division are promoted and replace
+the worst teams in a higher division each year. In some sense, we can
+think of the hierarchy of leagues in soccer as being related to each
+other and in fact, in some sense, participating
+in the same competition, particularly if we look
+at competition over time. Here we're going to
+look at English soccer, and we're going to look
+at the four divisions which are connected through the system of promotion
+and relegation. We're going to see
+whether we have the same pythagorean expectation in relation to this data. Again, we follow the same
+processes we followed before. We'll load the packages, and then we'll load the data. You can see here that we have actually a rather stripped
+down form at the data, so we've got a relatively
+small number of variables. Let's look at the
+variables we've got. Again, for each team we've
+got the games played, the home team, the away team, the goals scored, the goals
+against, and the result. But remember also here
+in the game of football, unlike most of the other
+sports we've looked at, a draw or a tie is a
+very common occurrence. The results here are H, that means home win, A, away team win, or D, that means a draw or a tie and we have a
+lot of those games. The other thing to
+notice is we have the first column here
+is DIV means division, and then the EPL means
+English Premier League, and then at the bottom
+here you can see FL2, which means Football League 2, there are in fact four
+divisions in our data, and we've combined all
+of those in one dataset, so we have 2,000 rows. Again, a nice large
+dataset of the similar to what we had with
+baseball and basketball. Now what we're going to
+do is we're going to code the value of the result. Now we're going to have
+three results in our data. We're going to have a home win which will give a value of one, or we could have an
+away win which would have a value of zero
+for the home team. Obviously a one for the away
+team if they're the winners, and then the third
+possibilities we can have a drawer or tie and we're
+going to get that a value 0. We're going to call a
+draw equal to half a win. Using that convention,
+we can then construct win percentages as well
+in the world of soccer. Let's run that and
+create these variables. We're going to have the count
+variable again in order to see the number
+of games played. Now, we're back in the world that we were in in the
+first two sets of analysis when we looked at baseball and cricket where we've got each game is a single row, so we have to sort out
+the performance of each team as a home team
+and as an away team. You can see here the value for each team's performance
+across the season. We're looking at the
+number of home wins, games played at home full-time, home goals scored full-time, away goals scored, and so
+forth as the home team. We got 92 teams in
+total in the dataset, that's the all of the teams in the four divisions of
+the league competition. Now we do the same thing, the mirror image for the teams. As away teams again, we've got the team names
+and the games played. The number of away wins, goal score, goals against. Bearing in mind, we've got
+now draws as half wins in this dataset and we now do the merge where we put
+these two things together. We now have our combined
+values for wins, games played, goals for, goals against, both as
+home team and away team. We add those up to give the total number of
+wins, total goals, total games played,
+total goals scored, and total goals conceded. We have that as we did
+in baseball and cricket. Then finally, we create the
+values for win percentage, wins divided by number of games scored plus the
+Pythagorean expectation, goals scored squared
+divided by the sum of goals goals scored squared
+and goals conceded squared. Then we have our DataFrame, again the same format, but this time now we have
+92 teams in our dataset. We can do a rail plot again here. What we can do is add something
+extra in our row plot. Because each of these
+teams come from a different division,
+potentially, we could actually code that
+in our data and create a plot which shows each division as a different color
+in the DataFrame. If you actually run this here, then look at what we get. You can see here it's color-coded and allows
+us to see where each team in each division
+is located on this chart. But once again, we get the
+very clear relationship that we saw in the baseball
+and basketball data. We see this very strong
+linear relationship between Pythagorean
+expectation of win percentage. In our soccer data, even though the structure of the competition is
+rather different, we see exactly the same
+relationship emerging. When we run our
+regression, again, we look at the coefficient
+on Pythagorean expectation, we have a value for the
+coefficient and we can see it's statistically
+highly significant. We have a very large
+T-statistic and a p-value of 0.000 again. When we look at the
+R squared up here, we can see an R squared of
+0.93 for which tells us that our Pythagorean expectation is capturing a very large fraction, almost all the variation in lead position that we can find. What we've shown this
+time is that again, even if we look at a very different competition we look at the world of soccer, we still find the
+same relationship we found in baseball
+and basketball which is telling us really this
+Pythagorean expectation seems to be a fairly
+common feature of all sports and the only outlier appears
+to be cricket data. What we're going to do next is something a little bit extra compared to what
+we've done so far. So far, we've said that
+Pythagorean expectation seems to be a pretty good proxy for winning if you want to know whether a team is winning, but you don't know
+the number of wins, but somebody tells you the
+Pythagorean expectation, you wouldn't be a far wrong in most cases from saying, well, the winning percentage is probably close to their
+Pythagorean expectation. But that's a rather
+backward-looking way of thinking about it. We are thinking about
+looking at past performance. What about the future? Could we use Pythagorean
+expectation to predict what the outcome is going to
+be of games in the future. That's what we're
+going to look at in the final session of this week, we're going to look at
+seeing whether we can use this as a forecasting tool.

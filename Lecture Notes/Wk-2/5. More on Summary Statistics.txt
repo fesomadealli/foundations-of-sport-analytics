@@ -1,0 +1,122 @@
+In the last lecture,
+we talked about how to calculate summary statistics
+in Jupyter notebook. In this lecture,
+let's talk about how to interpret these statistics, and we'll also introduce
+correlation analysis. Please open the Jupyter notebook Summary Statistics and
+Correlation Analysis. Again, we will need to first import pandas library
+into Jupyter notebook. Let's also import our
+last saved NBA games to dataset into Jupyter notebook. We will compare the
+success rates of two-point field goal and
+the success rates of three-point field goal to
+demonstrate the difference between central
+tendency and variation. Let's first calculate
+the summary statics for the two-point field
+goal success rate, the FGPCT variable. Let's also calculated the
+summary statistics of the three-point field goal
+success rates, FG3_PCT. We can see that the average success rate for
+two-point field goal, it's 0.452490, which is
+above 45.25 percent. The average success rate for three-point field
+goal is 0.350617, which is about 35 percent. This means that the overall success rates of the
+two-point field goal, it's about 10 percent higher than the overall success rate
+of three-point field goal. The median of a two-point
+field goal is 0.4520. This means that in half
+of the games teams have two-point field goal success
+rate less than 45 percent, and in the other
+half of the games, the teams have a
+two-point field goal greater than 45 percent. The standard deviation for a two-point field goal
+success rate is 0.0056, while the standard deviation for a three-point field goals
+success rate it's 0.00995. This means that there's
+greater variation in this three-point field
+goal success rate than the two-point field
+goal success rate. When there's greater variation, it means that there's
+more uncertainty and therefore it will be
+harder to predict the future. We can also try to regionalize
+the standard deviation. We can also try to visualize
+the distribution of the two variables by graphing the two
+histograms separately, but side-by-side
+using similar codes that we learned in
+the previous lecture. Again, we'll use the hist
+function to graph a histogram. But inside the histogram, we need to specify both
+variables, FG_PCT and FG3_PCT. We also want to specify
+20 number of bins. Additionally, we
+would like to force the x and y axis to
+have the same range. So we will need to use
+the share x equals to 2, and share y equals to
+2 option in Python to restrict the same range for x and y for the two histograms. As you can see, the three-point
+field goal success rate, it's more spread out compared to the two-point field
+goal success rate. This is consistent with our summary statistics that
+the standard deviation for a three-point field goal
+success rate is higher than the standard deviation for a two-point field
+goal success rate. We can also graph the two
+histograms in a single plot. To do so, we need to first introduce a new
+library, matplotlib. Matplotlib provides
+useful functions to make more advanced
+the textural graph. In particular, we will be using the p1 plot function
+from matplotlib library. We'll import matplotlib.PL plot. We also want to import it as PLT, so that our code will be shorter. In this line of code, to graph two histograms
+in the same plot, we will first specify
+the DataFrame name, and we'll use two
+brackets to specify both variables,
+FG_PCT and FG3_PCT. Instead of using the
+simple hist function, we'll use plot.hist function
+to graph the two histograms. Note that if we do not specify any transparency
+of the histograms, the two histograms may block each other where they overlap. We can use alpha option
+to specify transparency. Alpha equals to 0
+would be completely transparent and alpha equals to 1 will be completely opaque. Here let's specify
+alpha equals to 0.3. Again, we will specify
+20 number of bins with the function pyplot
+under the library matplotlib. We can also add labels and
+titles in to our graph. We can use plt.xlabel to add a label for the
+horizontal axis. Let's call it field
+goal percentage. We can also label the
+y-axis as frequency. Additionally, we can use plt.title to add a
+title to the graph. We can also specify the
+font size of our title. Lastly, we can also export our graph using the
+savefig function. We can also specify the image format when
+we export our graph. This graph will be saved in the same folder as
+our Jupyter notebook. As you can see from this graph, the three-point field
+goal's success rate, it's lower in general
+and more spread out. In sports, we sometimes use
+the mean to make predictions. The standard deviation
+wide some idea about how confident we should be to use the mean to make predictions. In this example, we
+are more confident to predict that the two-point
+field goal success rate, it's about 45 percent than we are to say that the three-point
+field goal's success rate, it's at 35 percent. We can also make graphs
+by a certain criteria, just like we can produce summary statistics by a criteria. For example, we can graph
+the success rate of a two-point field goal based on whether the team worn
+the game or not. We can simply add a by option inside the hist function
+to produce two histograms. One is when the
+team won the game, and one is when the
+team lost the game for the variable field
+goal percentage. Additionally, we can also change the color of our histogram similar to when we produce
+histograms of two variables. We also want to force
+these two histograms to have the same range
+in x and y-axis. It is interesting to see that
+the two histograms based on whether the team won or lost the game for the field
+goal's success rate, both center around 0.4 and 0.5. The success rate has
+slightly less variation. In sports, we are
+sometimes interested in the change of performance
+of a team or a player. We can visualize such
+change by making a time series graph
+in Jupyter notebook. Let's graph the point
+by Detroit Pistons in the 2017 and 2018 season. The first step is
+to make sure that our game date variable is
+store in the date format. You run the same code as we learn last time. Just to be sure. We now need to extract
+the Piston's game in the 2017 and 2018 season
+by subsetting the data. Let's create a new dataframe
+called Piston games. It is a dataframe extracted
+from our NBA games data, but only include the observations where the nickname variable
+equals to Pistons, and the season ID equals 22017, which is the season ID for
+the 2017 and 2018 season. Lets focus only on the
+regular season games. The regular season for Detroit
+Pistons in that season started on October
+seventeenth, 2017. We'll specify the game
+date to be greater or equals to 2017,1017. Note that for date
+variable we can simply use the greater, equal or last team operators. But when we specify the date, we need to add a quotation
+mark to the date. Now we can create a
+time series graph for the point earned by Detroit Pistons for
+each game over time. We'll put the game date in the x-axis and the
+point in the y-axis. We can also save this graph
+using the savefig function. As we can see in this graph, the point earned by
+the Detroit Pistons fluctuate a lot
+throughout the season. There's no obvious pattern of the performance of the
+Detroit Pistons team.

@@ -1,0 +1,61 @@
+So we've looked at two sports,
+baseball and cricket, and now we're going to run
+exactly the same exercise. Look at the relationship
+between win percentage and Pythagorean expectation for
+a third sport that is basketball. We're going to use NBA data for
+the 2018 season. So, and we're going to use exactly
+the same process as we used in the previous two cases. So let's get going. So, first, we load up the packages,
+next we load up the data. This is slightly different
+data frame here and we have all of the games for
+each team in each season. And what we have here is
+the various statistics relating to the performance of the teams. But we also have in this data frame,
+something to know. Each team appears twice for each game, first as the home team and
+then as the away team. So in that sense, we have twice
+as many rows as we have games. So whereas before we needed to separate
+out and create two data frames for home team and away team, actually, this has
+already been done for us in this data set. That's a difference that it's
+worth remembering as we move on. You can either have a data frame, which identifies an individual
+game where you have two teams. And then, if you want to measure
+the performance of each team, do you need to separate them out? Or you have a data frame where
+each game appears in two rows, one for the home team and
+one for the visiting team. So, in this data frame,
+we have two rows for each game. So also, this data frame includes
+more data than we need, and we just want to focus on
+regular season NBA games. So we take that subset here, we can see the list of variables
+that we have in our data here. Again, we've got many more
+variables than we need. We're also going to drop
+rows with missing variables. We don't want to include
+those in analysis, and so we can drop those here using dropna. And then we identify each game where
+the team wins with the value one, which means that, of course,
+it's either win or lose situation. So that is way, if you didn't win,
+you have a zero, which represents a loss. So that enables us to count up the
+statistics and the values for each team. So now here, instead of creating dudes
+two data frames and merging them. We actually can create just one data
+frame using a group by for team name, with the results for each team,
+the points scored and the points against again, it's a sum. But we don't need to do the teams as home, team and away team because that's
+already been sorted out for us. So we just have a list of teams again. This list is going to
+be 30 rows long term. So, now we look at the data, so
+we've got actually 29 teams, so we have one missing team in our data here. But that doesn't matter
+too much in this context. And we have the result, the number of
+wins for the team across the seas, the number of points scored and
+the number of points against. And out of that,
+we can create the win percentage again. Every team plays 82 games, so
+the win percentage is just the value for the result divided by 82. And we have the Pythagorean expectation,
+which is as before, points scored squared divided by
+the sum of points scored squared and point conceded squared. So we have our data in the format
+that we want to analyze it. And so
+we do the same things we did before. Now, with our statistical analysis, we first run a rail plot to see
+what the relationship looks like. And you can see that list looks very
+similar now to the baseball example. Not at all like the cricket example. And if we run our regression,
+you'll see that the regression results are also rather similar to what
+we found in the baseball case. We can see here the coefficient
+on the Pythagorean expectation. We can see a very large t statistic and
+a P value of 0.000 which essentially means this is highly
+statistically significant. And we have up here in our square 2.943,
+so, and even closer fit in that sense than
+we saw with the baseball data. So in that sense,
+we found that when we look at the NBA, we get a very similar result. And maybe that's because again we
+have similar amounts of data to the amount that we had in baseball. Or maybe it's because again, the scoring rules work more like
+baseball than they work like crickets. So again that gives us pause for thought is what might really be behind
+the relationship that we observe here. So now we've done three sports. Let's look at one more. Let's look at english football and see
+what the relationship looks like there.

@@ -1,0 +1,158 @@
+In the last session, we looked at the Pythagorean expectation
+in relation to baseball, and now we're going to look at a different sport, cricket. Cricket is about
+ball game as well, and you have innings, runs. So in some sense, you might think it was
+going to look very similar, but there are some important
+differences and they will become apparent as
+we go through the data. We're going to look at the data for something called the
+Indian Premier League, which is the world's most
+popular cricket competition. It's played annually in India and involves most of the
+world's best players, and it's played to a
+very specific format. If you're not familiar
+with cricket, you might think this is
+a long and boring game, but actually the format they play in Indian
+Premier League takes basically about
+2-3 hours to complete. So it's actually quicker
+than a baseball game. The game involves each
+side delivering up to 120 pitches or balls in cricket and the
+other side batting and scoring as many
+runs as it can. Unlike baseball which has
+nine innings for each team, actually there's only
+one inning for each team in the Indian Premier League
+in this format of the game. That's one difference that will actually turn out to
+be quite significant. But let's just look at the data, so we're going to repeat
+exactly the same process we just went through with baseball. The first, we start
+off by importing the packages that we
+need to run the code, and then we open the data set
+and here are listed name. You can see once again, we have quite a lot
+of variables here, more variables that
+we're actually going to need. Let's take a look at it. It's always a good to have a look at the
+data that we've got. One thing you'll see
+here is that if we go to the bottom left-hand
+corner of the DataFrame, you can see the size of the data and then
+you can see we've got 60 rows and 27 columns. In fact, in this DataFrame, we've only got 60 games in
+total played in the season. Remember we had 2300 or so
+for Major League Baseball, so that's another difference that we are going to get here. Now we're going to do a number
+of things all in one go, which is identify
+the winning team for each game when the
+team is a home team, when the team is in a way team. We're going to identify the runs for the team
+when the team is a home team and when
+the team is and away team and we're going
+to add the count variables. Again, they're very
+similar to what we did in the previous
+analysis of baseball. Then we're going to create our IPL home data frame using the dot group
+by function again, and you'll see again, this looks very similar to what we did with the baseball data. But you can see here
+instead of 30 teams, we only have eight teams in
+the Indian Premier League, so it's a much
+smaller competition. But the same variables as we had in Major League Baseball. We've got the home wins, the run scored for, and the runs scored against, and we've got our count variable, the number of games played. Again, this is the number
+games played as a home team. We're going to do the same thing now for the teams as away team. So we're going to use
+the group by function, but now by the away
+team in order to create a parallel
+DataFrame and here we are. We've got the variables here, the same variables
+exactly as we had, but now viewed of teams
+as the away teams. Then next we're going to merge those two data
+frames to produce a summary of the
+entire performance of the teams across the season, both as home teams
+and away teams. That's our basic
+data that we need, but we need now to aggregate it so we need to
+create the number of wins, combining wins as home team
+and wins as away team, games played as home
+team and away team, runs scored as home
+team and away team, and runs against when a playing at home and when playing away. We do that. Again, just like we did with Major
+League Baseball, we end up with four columns
+at the end of year, wins, games played, runs
+scored, and runs against. Let's now create the variables
+that we're interested in. The win percentage, which is the wins divided by the
+number of games played, and the Pythagorean expectation, which is runs scored squared divided by the sum of runs scored squared and runs against squared. Let me do that. Those are our last two columns
+and those are obviously the variables that
+we're interested in. As we did with baseball, let's now plot our data, and we'll use sns.relplot again, with Pythagorean expectation on the x-axis and win
+percentage on the y-axis. Two things to note here
+when we look at this data. Firstly, because we've
+only got eight teams, we have many fewer dots, so it's harder to discern
+any relationship when you have so many fewer
+observations in your data. The second thing to notice
+is that the dots tend to be scattered all over the plot, they're not neatly
+organized from left to right in an upward
+sloping relationship as we saw with baseball. That suggests perhaps warning to us that we're
+not going to find a very close
+relationship when we try to quantify this by running an ordinary least
+squares regression, which is the next thing we do. Again, remember this is exactly
+the same formula that we used when we ran the regression for
+Major League Baseball. The only difference
+is that we're using the IPL data now and not the
+Major League Baseball data. Now, we come out here and again, let's focus again on the two statistics
+we're interested in, the Pythagorean
+expectation itself. The coefficient is 3.55, but then the standard error
+is very large, it's 2.626, which gives us a t-statistic of 1.353 and then this value here, the p-value is 0.225. Remember I said at the
+end of the last session that a threshold for statistical
+significance is 0.05. Values above 0.05 are considered statistically
+insignificant, and values below 0.05 are considered
+statistically significant. This value here is above 0.05. We would say that there is no statistically significant
+relationship between Pythagorean expectation
+and win percentage. In fact, although we have an estimated
+coefficient of 3.55, it might as well be an estimated
+of coefficient of zero. We have no confidence in this
+relationship and therefore, we can really say
+that we don't know if there's any relationship
+at all between Pythagorean expectation
+and win percentage. Then look at this other
+variable up here. The R-squared is
+0.234, is quite small, and that reflects the
+fact that we don't have a very reliable statistical
+relationship between win percentage and
+Pythagorean expectation. How should we interpret this? Well, we've now run
+essentially the same test using two different datasets and come up with two quite
+different answers. One we found in Major
+League Baseball a reliable relationship. Here we find a relationship
+that is not reliable at all. What could explain
+the difference? This is part of the process of interpretation that becomes very important when we
+do this analysis. There's two basic ways you might try to understand
+what's going on here. The first is to say
+it's something to do with the statistical
+properties of the data. For example, we could say in the Major League
+Baseball case we have 30 observations and
+here we have only eight and that's a
+much smaller sample. It's much harder to find relationships with small samples. Maybe there is a
+relationship between Pythagorean expectation
+and win percentage in the Indian Premier League. Maybe we just don't have
+enough data to see it. At a point that's related
+to that is remember we had 2,000 plus games in Major League Baseball and here we only had 60 games played. Maybe we just didn't
+have enough games. There was too much noise
+in the data for us to identify the
+relationship reliably. That could all be true, but there could be another
+explanation which has more to do with the difference
+between cricket and baseball. These two games, although they're both bat and ball games, there are some
+significant differences. One particularly
+important difference is that I mentioned at the beginning has to do with the number of
+innings played. In cricket, in this competition, in particular, their each
+team only has one innings. What that means is each
+team bats in turn. What that means is if you're
+the team batting second, you have a target number of runs you need to score to win. If you fail to reach
+that target, of course, the gap between you and your
+opponent could be anything between one run and the total number of runs scored by the team batting first. But if the team batting second
+manages to win the game, only needs to do is to score
+more runs than the team that batted first and that
+means just one more run. The implication is that if the team batting second
+were to continue, it might score a lot more runs, but it doesn't bother
+to do so because it's overhauled the total
+of the team batting first. There's an asymmetry there
+in the relationship. We'll see a very close
+relationship between the number of runs
+scored when the team batting second wins and a very big difference
+between runs scored or bigger
+difference between runs scored when the team
+batting second loses. That might be a reason why this relationship
+statistically does not appear to be very strong. How should you proceed
+in this situation? Well, the first thing is to
+recognize that there are potentially multiple
+interpretations of this result. Then the second thing, if you really want to try
+to resolve this problem, is really to gather more data and to see whether this
+relationship is stronger once we have a bigger dataset for Indian
+Premier League cricket. But we're not going
+to do that here, we're just going to leave that
+as a puzzle to be solved. Perhaps you might want to
+go onto the Internet and collect that data for
+yourself in order to understand that better. About what we're going
+to do next is move on to looking at a third sport. Looking at a third
+sport will see whether the Pythagorean expectation holds in the same way as
+it did for baseball, or whether it's more like the
+results we got for cricket.

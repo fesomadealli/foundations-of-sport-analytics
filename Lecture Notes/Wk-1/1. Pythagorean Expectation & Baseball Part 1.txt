@@ -1,0 +1,220 @@
+Welcome to this series of
+MOOCs on sports Analytics. During this series,
+we're going to show you how you can use Python to code sports data to generate interesting results
+and understand better what's going on in
+professional team sports. Now, that really is going to involve three different
+kinds of activities. The first is introducing data, analyzing the data,
+coding it in Python. The second part is
+then how to run statistical analysis on the data. The third part is how to
+analyze the results and interpret them to identify some meaning in what we're doing. We're going to look during
+this series of courses at data using five
+different sports. We're going to focus
+on baseball, cricket, soccer, basketball, and hockey, ice hockey, as it's known
+outside of North America. Of course, the analysis could be applied to lots of
+different sports. We're going to use
+numerous examples and use the data to show you the
+different techniques that you can employ in
+analyzing sports data. We're going to show you a lot
+over the series of MOOCs. But to get started, I want to show you how to conduct a relatively
+straightforward analysis of sports data to produce some
+quite specific results. What we're going
+to start off with is a quite detailed example. Don't worry if you find some of these challenging
+to begin with, as we go through the MOOCs, this is going to become
+clearer and clearer, and so in this initial week, I just want you to get used
+to the sorts of things a power that you have in something like Python
+analyzing sports data. As we go through the weeks, more and more of this
+will become familiar. The concept I want
+to introduce you to this week is the
+Pythagorean expectation. Now this is a concept
+that comes from baseball. It was developed by
+the baseball analyst, Bill James, one of the
+great analysts of sports. It's basically about a
+relationship between winning and the success of teams
+as measured by points, goals, runs, score, depending on which sport we
+happen to be talking about. The pedigree and
+expectations states that the percentage of games
+it will win across the season is going
+to be proportional to the ratio of the
+square of the points, runs, goals scored by the team, divided by the sum of
+squares of the points, runs scored by the team
+and its opponents. That relationship is something that we can measure with data. We can actually calculate the Pythagorean
+expectation for each team. Then we can test whether it truly is related to the win
+percentage of the team. That's what we're going to do. We're going to look this week
+over four different sports and see whether that relationship really is there in the data. What we're going to begin with is the Pythagorean
+expectation for baseball. The way we're going to do this is we're going to follow a process, again, the same process, we're going to follow it
+throughout this week. We import packages into
+our Jupyter Notebook, which allow us to
+analyze the data. We then import the data itself. We then do some
+shaping of the data to get it into a format
+that we can analyze. We then run statistical tests and then we interpret
+those results. That's going to be the
+process we're going to go to. Let's get started straight away. The first thing, and this is
+something you will do every time you start a
+session in Python. We're going to import some
+packages that we need, and you'll see these names
+come up again and again. pandas is one, NumPy is another, statsmodel is a third, Matplotlib, and seaborn, are fourth and fifth
+packages that we use. We won't always need these
+packages at every stage, but there's some basic packages
+that carry out functions, which we will find useful
+and we'll see some of those in action in this session. We'll run that line of code
+and those packages will run, and you can see there, on the left-hand side, there's a number 1, which means that we run
+the first line of code. Whilst the code is still running, you'll see an asterisk
+in that space, and when it's finished,
+it will come up with the line number that
+you've reached. We're looking at baseball, we have a baseball
+dataset which is a log of games played in Major
+League Baseball in 2018. We're going to open that dataset and print out the list of the names of variables
+in that data, so let's just run that and
+you'll see what we have here. Again, we have to
+wait as it runs, and there you can
+see a very long list of names of variables. The first one is the date, the second one is doubleheader, the third is the day of the week, the fourth is the
+visiting team, and so on. Now, depending on what
+we're trying to do, we might find all of this
+data useful at some point, but we're not going to need anything like all of it today. But before we start breaking it down and
+shaping the data, let's just take a look at
+how the Data Frame appears, and we can do this simply by typing the name of the
+Data Frame we've created. We've called this Data Frame MLB, if we just type MLB, it will actually appear for
+us in a separate screen. There you can see
+along the columns, the first column is the day, the second column
+is doubleheader, but third column is
+day of the week, the fourth column is
+visiting team and so on. If you scroll along to the right, you can see each of the
+variables in the data, and if you scroll
+down to the bottom, if you go right to the bottom left-hand corner of the data, you can see a measure of
+the size of the Data Frame. You can see there it says
+2,431 rows and 161 columns. It's a fairly
+substantial data set and we're not going to need
+anything like all of it. In fact, in order to run our Pythagorean
+expectation analysis, all we actually need is going to be the identity of the teams, the runs they scored, the runs scored against them, and the aggregate of those values across
+the entire season. Having looked at the Data Frame, let's just now create a subset of the data which includes
+those variables we need. We're going to take the
+names of the visiting team, the home team, the
+runs they scored, the runs scored by
+the visiting team, the runs scored by the home team, and the date on which
+the game was played. You can see also here, I actually going to rename
+some of these columns, then become apparent while
+I'm doing this in a moment. But first let's just run it
+and see what it looks like, and you can see here, we now have columns for
+visiting team, home team. The visiting team's runs scored, the home team's runs scored, and the date that
+the game was played. Now, our data set consists
+of individual games, and in each game
+there are two teams; there's a home team
+and a visiting team. If we want to calculate the total number of runs scored by team across
+the entire season, we're going to need
+to take into account the run scored when it was the home team and the runs scored when it
+was a visiting team. Also we'll need to have
+the runs scored against it when it was the home
+team and the runs scored against it when
+it was a visiting team. In order to do that, we're going to cut
+this Data Frame up into two smaller Data Frames; one for teams when
+they're visiting teams, one for teams when
+they're home teams. Then we're going to merge
+those two data sets to get the aggregate for each
+team across the season. All the instances where
+it's a home team and all the instances where
+it's a visiting team. The first thing, we need to say is who was the
+winner of the game. We're going to define the
+winner of the game obviously as the team which had the
+most runs in the game. That determines who the
+winner is going to be. We're going to create a
+variable, which is 1, if the home team won the game, and 0 if the home
+team lost the game, i.e the visiting team won. There are no ties in baseball, so we don't have to worry
+about the scores being equal. You will see that there is a particular function
+that we can use here in this line,
+it's called np.where. Np is the abbreviation
+for NumPy and this np.where functions
+like an if statement, if you've ever used Excel, you'd be used to if
+statements in Excel. It's an if relationship
+between two variables. It has one value, you return a particular value, 1 in this case, if it doesn't have that value, you return an alternative
+value 0 in this case. I've also created a
+simple count variable, which just has the value 1, for each row and we're going to use that when we aggregate across each game played by each team to work out the
+number of games played. If we run that line we can see this is what our
+data now looks like. We have again the same variables, as before but now we've added a variable for whether
+it was a home win, an away win, and our count variable which is
+simply 1 in every row. Of course this data still
+has the same number of rows, as we started off with. We still have 2,431
+rows of data here. Now, what we're going to do, is do the aggregation
+which would allow us to identify the records of
+each team across the season, their record as a home team, and their record as an away team. In order to do this aggregation, we are going to use a
+function called.groupby and groupby is something
+you'll use over and over again in Python when
+you're organizing data. It basically, allows
+you to summarize the data according to some
+particular characteristic. Here if you look at the first, line of this part of the code that we're
+going to look at, it says MLB home
+equals MLB 18.groupby. That means the MLB home is
+going to be a new DataFrame. That new DataFrame is
+going to be taken from MLB 18 using this
+groupby function. Then you can see in parentheses, the variable home team. That's going to be
+the variable by which the groupby takes place. Basically, we're going to
+aggregate across home teams. Then after that, comes a
+list of four variables, and these are the four variables that are going to be grouped. They're going to be home wins, runs scored by the home team, runs scored by the visiting team, and our count variable. Then after that, it says.sum and that's the way in which the data is
+going to be grouped. We could take averages. We could find the
+maximum or minimum, but here we're going to take the sum of all of these values. That will give us a statement of how the team did
+across the season. You'll see that after
+that.sum it says reset index. That's something which just
+helps us keep the data tidy. Again, we'll come
+back to reset index, again as we go on
+through the course, so you don't need to worry
+too much about that now. But if you are curious, you could try rerunning the data without.reset index and you could see what the
+problem would be there. The next line of code here is, then just to rename the columns. We're going to rename
+these because we're first looking now at the performance
+of teams as home teams. But we're next going to look at the performance of teams
+as visiting teams. Then we're going to combine their performance as home
+team and as visiting teams. In order to do that, we want to have different names, depending on whether we're
+looking at the DataFrame for home team performance or the DataFrame for visiting
+team performance. We renamed all the
+variables here, the visiting team runs as visiting runs when looking
+at the home team DataFrame, home team runs, looking at
+the home team DataFrame. But rather than call it
+though home team now, I've also just calling it team, because that's going
+to be the variable by which we end up merging
+the two DataFrames, as you'll see in a minute
+and I'll come back to that point later. Let's see what we get here
+when we run this line of code. Now, when we run that code, what we can see is, we now have a list of teams. The list is only 30 rows long. Note that the rows in
+Python start at zero, so if the number goes up to 29, then we actually have
+one more row than that, we have 30 rows, which is the 30 teams in Major
+League Baseball, in 2018. You've got the name of the team, a number of teams
+wins as a home team, you've got the number of runs scored by the team
+as a home team. The number of runs scored by visitors against the team
+when it was a home team. Then the number of games
+played as a home team. One thing you can see
+here is that in baseball, there's not a completely
+balanced schedule, so some teams play 81 games, some teams play 82
+games and so on. That's why we need to
+keep in mind the use of the number of games
+and that's where our count variable
+has come in handy. Now we're going to do
+exactly the same thing, but do a groupby but for
+the teams as an away team, so our visiting team. We're going to run
+the doc groupby using visiting team this time. We're going to aggregate
+exactly the same variables, so that row of code
+looks pretty much the same except it's just
+defined by visiting team. Then in the next line we
+rename the variables, giving them a label as the visiting team
+or away team data. Instead of this R for
+visiting team runs, we look at this, RA which is visiting team runs scored when the team is an
+awaiting, or a visiting team. We're going to call this
+second DataFrame MLB "away," which means the record of the team as a visiting team. If we run that, what we see is again, a DataFrame that looks
+exactly the same as before, except that we now have variables for the
+team as an awaiting. The first row tells
+us the number of wins for ANA which is Anaheim
+as a visiting team, so it had 38 wins on the road. Again, we can see
+this is 30 rows long. We now have two
+DataFrames that we've created from our
+original DataFrame. These two DataFrames summarize the performance of
+teams as home teams, and as visiting teams. What we next need to do is to merge these two
+DataFrames together to give us the total performance of each team across the season. For that, we're going to use another command that you'll come across frequently,
+that is pd.merge. Pd, again from "Pandas" and merge just allows us to put these
+two DataFrames together. The commodity is fairly
+simple in fact, so to merge, we just say that the name of the two DataFrames
+we going to merge. Then, what is the
+variable by which we merged the two DataFrames? That variable here
+is going to be t, that's why we had to have
+a common name in each of the two DataFrames so
+that we could tell Python by which variable we
+were going to merge these. For example, what this will do is any row that says ANA in one DataFrame will be merged with the row that says ANA
+in the other DataFrame. We will have the
+combined performance of Anaheim presented in
+the same DataFrame, and if we just run that merge, you can see that happen,
+so there you are.

@@ -1,0 +1,114 @@
+Before we move on to
+doing any data analyses, we usually need to
+check if there is any missing value in a null data. That is, the source may have failed to collect
+all the information. We can first use
+the Info function, which will return
+the total number of observations that have real
+values for each variable. By comparing these numbers of observations across
+our variables, we can see if there's any
+variable with missing value. As we can see from the output, most variables have
+18,421 observations. For some variables,
+for example, WL, FG_PCT have less than
+18,421 observations. This means that some
+observations are missing information
+on some variables. We can also use the iisnull and notnull function in pattern to detect observations
+with missing value. There are two main approach
+to handle missing values. First, we can simply drop the observations
+with missing values. We can use the
+notnull function from pandas library to
+drop observations with missing value in
+certain variables. For example, if we want
+to drop observations with missing values in the
+field goal percentage, which is FG_PCT, we can use notnull function to keep all the observations
+that do not have missing values in
+the FG_PCT variable. Notice again, we're essentially creating a new data frame with no missing value in the specified variable and replace the old data
+frame with the new one. Another approach is imputation. Rather than dropping all the observations
+with missing value, we may want to replace
+the missing value with valid values instead. We can use a fillna function to replace missing values
+with other values. For example, if you
+want to replace the missing values with
+the mean of that variable, we can use the fillna function and inside the parentheses, we can specify the replacement to be the mean of the variable. It is important to note that data imputation may have
+different consequences depending on the proportion of missing values in the
+nature of missing values. Whether it is missing
+completely at random or missing at random or
+missing not at random. For example, if all
+the observations with small values are missing
+from the dataset, then the median of the sample would be larger than
+what it actually should be and replacing
+the missing value with the median would not
+be the best approach. In addition to
+dropping variables, we can also create variables. We can simply use the equal
+sign to create new variables. For example, we can
+create a variable that equals to total
+number of goals made by adding the three-point field goals made and free-throw
+made altogether. More often, we may want to create a variable based
+on some conditions. That is, we can
+create a new variable conditional on the value
+of an existing variable. For example, we can create a variable result that equals to win if the team won the
+game, and loss otherwise. The result of the game can be captured in the final
+scores of the game. In our MBA games data frame, variable PLUS_MINUS
+indicates whether the team got a positive or
+negative score in the end. We can use the where
+function from NumpY library to define this new
+variable result. In this line of code, we create a result
+variable based on the value of a PLUS_MINUS. If PLUS_MINUS is greater than 0, then we assign a value W
+to the result variable, if PLUS_MINUS is less than 0, then we assign a value of
+L to the results variable. Since we already have a WL variable to indicate
+the result of the game, we can drop our newly
+created results variable. We can also create
+variables within groups. In the dataset, each game
+has two observations. One represents statistics
+of the home team, one represents those
+of the away team. Both observations have
+the same game ID. We can create a variable
+points difference that equals to the
+difference between the point earned
+by the two teams. We first need to sort the
+data not only by the game ID, but also by the
+result WL variable. This will move the
+two observations of the same game adjacent to each other and put a winning team above
+the losing team. Now we can use the groupby
+function to create a variable, point underscore diff, that equals to a
+difference in the point variable PDS between the two
+teams in the same match. This is identified by
+the game ID variable. The point diff variable only has the point difference
+for the winning team, but not the losing team. We actually have a missing
+value problem here. We could use a few
+NA function we just learned to replace the missing
+value with a valid value. In this case, we want to
+fill the missing value based on the group game ID. Since now within each group, there's only one observations
+with real value, we can simply fill the
+missing values with the mean of the observation. Notice that inside
+a few function, we first group the
+data by game ID and then take the mean of the point diff variable for each game ID. We also need to use the transform function
+to make sure to map the group was mean to the index of the
+original DataFrame. As a final step, we want
+to make sure that there's no missing value
+in our DataFrame. We can draw observations with missing value using
+the dropna function. In practice, if one variable has a large proportion
+of missing value, it may be better off to
+drop the variable instead. Otherwise you may have to lose a large number of observations. Sometimes we may
+want to work with season level data rather
+than team level data. We can create a new
+DataFrame that includes aggregate information of team
+statistics in each season. We'll continue to use
+groupby function and specify the criteria for the group
+to be team ID and season ID. If you want to look at the
+sum of the team statistics, we can first select all the variables that
+we want to include in this season level DataFrame and then use the sum
+function in the end. Notice that in this
+newly created DataFrame, there are two levels of index, team ID and season ID. If you want to convert these two indexes
+back as variables, we can use the reset
+index function. We may be interested
+in knowing how many games a team plays in a season. We can also create
+a DataFrame that equals to the total
+number of observations within the same
+team ID and season ID using the size function. We can use the reset index
+function in the same line of code and inside the
+reset index function. We can also name the newly created variable
+to be game count. To save datasets after we perform data cleaning in Python, it may be useful to export the DataFrame back to a CSV file. We can use the
+choose CSV function to save the merged
+DataFrame as a CSV file. We'll specify index equals to false so that there will not be an index number added to the CSV file for
+each observation. A new CSV file containing the
+dataset will be created in the same folder where you
+have your Jupyter Notebook.

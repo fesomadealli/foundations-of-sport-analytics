@@ -1,0 +1,87 @@
+In summary statistics, we
+typically use two types of statistics to demonstrate
+the pattern of the data. One is the central tendency
+and the other is variation. For central tendency,
+we usually use the mean to represent the
+overall pattern of the data. Sometimes you may also include the median windows
+of spec to outliers. Mode which is the most frequency occurred value in the verbal, its occasional used as well. For variation, there
+are three types of statistics that measure
+the variation of the data. Variance, standard deviation, and coefficient of variation. Variance system average
+square distance of each individual data
+point to the mean. It is hard to interpret and we typically use
+standard deviation, which is the square
+root of the variance, and therefore measure
+the average distance of each individual data
+point to the mean. Occasionally, we will
+use the coefficient of variation to measure
+variation as well. Coefficient of
+variation is defined as the standard deviation
+divided by the mean. It is always between zero and one and therefore it
+is useful when we are comparing the variations of variables of different
+measurements scale. In Jupyter notebook, we can
+use the describe function to calculate the
+summary statistics of all the numerical variable. This function will
+return the number of observation they
+count hear, the mean, standard deviation, median,
+minimum and max and, a first third quartiles of
+the values of the variable. We can also add
+non-numerical variable, introduce summary
+statistics table by adding the argument
+include equals to all. You can see that for the
+non-numerical variable, the qualitative variable. This table provides the number of distinct values in the
+variable, the unique. It also provides the most frequently appear
+value of the variable, as well as its frequency, the top and freq. If we are only
+trying to calculate summary statistics of
+a single variable, we can simply specify the variable name and use
+the describe function. If you're only trying to
+find out for example, the mean, the median, a standard deviation
+of a single variable, we can simply use
+the mean function. The median function and
+the standard deviation, abbreviated as std function, to find the standard deviation
+of a single variable. We can also calculate the summary statistics
+of variable based on the value of another variable using
+the groupby function. In this line of code, we are trying to find the mean of other numerical variables based on whether the team
+won or lost a game. We first specify
+dataframe NBA games, and we'll use the
+group by function based on whether the
+team won lost again. This would be based on
+the variable WL we'll use a bracket to specify
+the variable WL. Then we'll use the mean
+function to calculate the mean of all the other
+numerical variables. Similarly, we can
+calculate the mean of a single variable conditioned on the value of another variable. The describe function
+can also provide important information
+about a date variable. For the game date, we can see that the describe function
+returns the number of unique value in the
+game date variable. It means that the number of
+unit value here is 1,559. It means that there
+are games that happen in 1,559 different days. He also returns the most
+frequently appear date it was on April 15, that means that the date with
+the most number of games. He also shows the first and the last date
+of our data set. Basic summary and
+descriptive analysis often involve visualizing the
+distribution of the data as well. We can visualize
+the distribution of a variable by
+creating a histogram. Let's create a
+histogram of the point variable PTS which is the
+point earned by each team. We can use the H-I-S-T function, the hist function in Python
+to graph our basic histogram. Inside the function we'll specify the variable name using the column equals
+two variable name. In histogram, the horizontal axis specified the value
+of the variable, and the vertical axis indicates the frequency that
+this value occurs. We can see that most of
+the values of the point variable are between 80-120. We can also change the number
+of bins in a histogram. Let's say we want
+to specify 20 bins, which means that we will
+first take the difference between the maximum value
+and the minimum value of the point and divide it by 20 to find the actual interval
+size of the histogram. We can add the bins equals to 20 option inside
+the hist function. Sometimes for visual appeal, we may also want to leave some space between the
+columns in the histogram. In this case, we can simply narrow the width of the column. We can specify our
+width equals 0.9, which means that
+we won 90 percent after width rather
+than a 100 percent. Finally, let's save our
+updated NBA games dataset. Let's call it NBA_Games2. Again, we want to
+export this data set as a CSV file using this
+2_CSV function in Python. We will use index
+equals to false, so that we don't add additional row index
+number into the CSV file.

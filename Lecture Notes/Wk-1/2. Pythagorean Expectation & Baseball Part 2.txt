@@ -1,0 +1,133 @@
+For each row we have the performance
+of the team as a home team. It's run scored as a home team. The run scored against it
+as a visiting team then and the number of games played as a home team. Then we have the number of winds
+of the team as an away team. Then the run scored by the home team. When the team in each row
+was the visiting team, the run scored by the visiting team
+when the team was a visitor and then the game's played a number of
+games played as a visiting team. And from that we can then add together
+these columns to get the performances to get the number of wins, the number
+of games played across the season, the number of runs scored by the team and the number of runs scored against it
+as a team across the entire season. So that's what we do next, and this is so they were now doing some
+basic arithmetic in Python. So the number of wins is simply some
+of the H win and A win columns. The number of games is the sum
+of the GH and GA columns. The number of runs scored is the run
+scored as a home team that's HomRh. And plus the number of teams scored as a
+visiting team when the team is a visitor, services are A. And then the runs against like
+wires are going to be the number of runs scored by visitor when
+the team is the home team and the number of runs
+scored by the home team. When the team in question
+is a visiting team. And when we do that, arithmetic will just simply produce
+a new set of columns for us. So there we have four columns created at the end W wins games, played G run, scored our and runs against RA. And now, finally, then we can create the
+variables that we're interested in from the beginning, which remember, we talked
+about the Pythagorean expectation. Well, the Pythagorean expectation
+defined a relationship between the win percentage of a team and the run
+scored and the runs against of a team. So when percentage is simply, wins W,
+divided by number of games played G and the Pythagorean expectation
+is the number of runs scored, squared for the team, divided by
+the sum of the runs scored by the team, squared and
+the runs against the team squared. So we now just create those variables. And so we now have in the last two
+columns are win percentage and Pythagorean expectation. So what we've done so far is to
+start with an initial data frame and manipulate that data frame and create new ones in order to generate
+the variables that we're interested in. So we started out saying we
+wanted to analyze the Pythagorean expectation we needed to
+take our raw data and create the variables we needed
+in order to do that analysis. So now we've done that we
+can move to the next stage, which is actually conducting
+some analysis of the data. So the first thing we're going to do,
+and usually this is good advice for any data set you're looking at
+is to actually draw a picture, produce a plot which will show us
+what the data frame looks like. So we're going to use seaboard. We have package we imported
+at the beginning as SNS. And we're going to do something
+called rail plot, which is a scatter diagram where we put the Pythagorean
+expectation on the X axis and the win percentage on
+the Y axis all the time. Of course, telling it that
+the data is our data frame MLB 18. And if we run that will now
+see a scatter diagram appear. And that's tells us fairly clearly
+that there is a strong correlation between the Pythagorean expectation and
+win percentage. It's pretty clear that by and large,
+the higher the Pythagorean expectation, the higher the win percentage
+of the team is likely to be. So this confirms the existence of
+the relationship described by Bill James. Now we can go one step further than that,
+and that is to actually quantify this relationship and
+put a precise number on it. So for each unit increase in
+the Pythagorean expectation, how much should win percentage increase? And to do that, we're going to use
+the technique known as regression, linear regression, which is going
+to essentially find the line of best fit that relates the Pythagorean
+expectation to win percentage. So that's a very simple thing
+to do in Python as well so we have a formula here in
+this next line of code which where we create this output
+called pyth underscore lm. lm standing for linear model and
+the command is smf.ols. So smf is the package for
+running regressions. ols stands for ordinary least squares, which is the standard form
+of regression formula. And then we state the equation
+that we want to estimate. And that equation is that win
+percentage on the left hand side is a function of the Pythagorean
+expectation on the right hand side. So you can see that that
+statement is in quotes and between wpc and
+pyth is the sign that tilde sign and that tells us that we run
+a regression of what's on the left of the tilde sign on the variable
+that's on the right of the tilde sign. And in fact, what we're going to see later
+is we can put more than one variable on the right of that sign. That will actually run the regression and store it in Python, but
+we actually want to see it so we actually have to have another command
+to actually see the regression and that's using the dot summary
+parentheses command dot summary, of pith underscore lm will
+show us a regression output. So let's look at that at the moment. So here's what you see
+when you run a regression. Obviously, there's quite a lot of
+information there and again not to worry too much at the moment about interpreting
+everything that you see there. There are only two things that you should
+take notice of right at this stage. And that is this line here which says,
+where pith this is the estimate of the coefficient of pith
+in our ordinary least squares regression. So that coefficient is 0.877 and
+underneath that sorry and next to it, you can see the value std. That's err. That's the standard error, and the coefficient divided by
+the standard error produces for us the t statistic,
+which is the next column, which is 15.370. So what does that tell us? Well, that tells us a couple of things. So firstly, it tells us for every unit
+increase in the Pythagorean expectation, you get a 0.8770 increase
+in win percentage. So it tells us the relationship
+between the two variables and gives us a specific number. And then the t statistic,
+which relates the coefficient of the standard error, gives us a sense
+of how reliable the data is. And the t statistic is
+usually used to identify what's called statistical significance. And in fact, the level of statistical
+significance is given to us in the following column, which is
+headed p greater than or equal to t, and the value there that
+you're looking at is 0.000. And the importance of this is
+that if this value becomes large, then we lose confidence that
+we have a reliable estimate. There's essentially a lot of variability
+or noise in the relationship. If the value is very, very small, then
+we have a high level of confidence that the relationship is being
+reliably estimated. And it's perhaps not surprising,
+given the scatter diagram that we looked at before to find this
+relationship is in fact pretty reliable. Now, how do we decide when
+something is reliable and when something is not reliable? Well, we have to draw
+a kind of artificial line, and that artificial line is
+drawn at a p value of 0.05. So any p value below 0.05 is usually
+considered to be reliable or statistically significant, and
+any value above 0.05 is usually considered to be unreliable or
+statistically insignificant. So 0.000 is obviously well below 0.05. And therefore, we are pretty confident that this
+relationship is statistically significant. The other line to look at here,
+which viewed, is the R squared up at the top
+right hand corner of the results. R Squared is a way of measuring how
+closely the variables fit together. And R squared can have
+a value between zero and one, where one is a perfect fit and
+zero is no fit whatsoever. And again, here the R squared
+is 0.894 which would generally be considered a pretty
+high value of R squared. We will consider R squared again
+as we go through our analysis that will come back to this and
+you don't simply want to allow your view of the regression
+to be governed by R square, but it is often a useful
+indicator of the reliability or the extent to which you have captured
+a relationship in the variables. Particularly captured what is
+going on with your left hand side variable the Y variable that you're
+trying to explain in some sense. So there we go in this session, what we've
+done is taken a first look at the kind of results that you can generate using sports
+data and statistical analysis in Python. So we went through three stages. Once we set up our packages and
+imported the data, we shaped the data so that we could do the statistical analysis
+that we wanted to do that actually took the most time. Then we conducted a statistical analysis
+of that first looking at the plot and then looking at the regression line. And then finally, we were conducting
+some interpretation of that. And again,
+once you set that all up, actually, those final elements can
+be done rather quickly. So some of this may be obvious. Some of this may seem
+a little complicated. So what we're going to do is we're
+going to repeat this analysis a few times now, using different sports, so that
+you become familiar with the process and see how it's set up. And that hopefully will then provide
+a useful introduction to the kinds of things you can do here as we move on later
+in the series of books to look at other problems and other forms of analysis.
